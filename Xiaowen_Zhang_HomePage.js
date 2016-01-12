@@ -1,0 +1,29 @@
+$(document).ready(function(){
+	$("#ambtn").click(function(){
+		$("#Research").hide();
+		$("#Projects").hide();
+		$("#Portfolio").hide();
+		$("#AboutMe").show();
+	});
+	$("#rsbtn").click(function(){
+		$("#AboutMe").hide();
+		$("#Projects").hide();
+		$("#Portfolio").hide();
+		$("#Research").removeClass("hidden");
+		$("#Research").show();
+	});
+	$("#wkbtn").click(function(){
+		$("#AboutMe").hide();
+		$("#Research").hide();
+		$("#Portfolio").hide();
+		$("#Projects").removeClass("hidden");
+		$("#Projects").show();
+	});
+	$("#ptbtn").click(function(){
+		$("#AboutMe").hide();
+		$("#Research").hide();
+		$("#Projects").hide();
+		$("#Portfolio").removeClass("hidden");
+		$("#Portfolio").show();
+	});
+});
