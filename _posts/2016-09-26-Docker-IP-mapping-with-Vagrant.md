@@ -87,3 +87,5 @@ _This solution only applies to OSX users, however, with only minimum tweak, one 
     Now we can use any computer in our local network to visit the nginx server that we just created that resides in a container running in a vagrant-based  vm on our computer!
 
     ![Nginx running]({{ site.baseurl }}/public/image/ip_mapped_successful.png)
+
+    Done.
