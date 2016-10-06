@@ -11,7 +11,7 @@
    <email>seanxwzhang@gmail.com</email>
  </author>
 
- 
+
  <entry>
    <title>Mapping Docker container IP with Vagrant machine</title>
    <link href="https://seanxwzhang.github.io/2016/09/26/Docker-IP-mapping-with-Vagrant/"/>
@@ -124,6 +124,5 @@
 &lt;/ol&gt;
 </content>
  </entry>
- 
 
 </feed>
