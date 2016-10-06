@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      [ts] not zi-hang &middot; Stuff I found interesting
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+  <!-- swfobject -->
+  <script src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+</head>
+
+
+  <body class="theme-base-08 layout-reverse">
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" >
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <img src="/public/profile.jpg" alt="profile" class="img-circle">
+    <h6 style="color: white; text-align: center"> Sean Xiaowen Zhang </h6>
+    <p>I study Computer Science in UCLA as a graduate student. This site is built to store and share thoughts on interesting technologies.</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/projects/">Project showcase</a>
+        
+      
+    
+
+    <!-- <a class="sidebar-nav-item" href="/archive/v1.0.1.zip">Download</a> -->
+    <a class="sidebar-nav-item" href="https://github.com/seanxwzhang">GitHub project</a>
+    <span class="sidebar-nav-item">Currently v1.0.1</span>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2016. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">[ts] not zi-hang</a>
+            <small>Stuff I found interesting</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="posts">
+  
+  <div class="post">
+    <h1 class="post-title">
+      <a href="/2016/09/26/Docker-IP-mapping-with-Vagrant/">
+        Mapping Docker container IP with Vagrant machine
+      </a>
+    </h1>
+
+    <span class="post-date">26 Sep 2016</span>
+
+    <p><a href="https://docker.com">Docker</a> is a powerful software containerization tool that lets you create multiple self-contained kernel-free containers that share a single virtual machine. It is a very trendy tool that drew attention from lots of companies and developers. Here I’m not going to elaborate on how docker works, so if you are new to Docker, feel free to visit their website, they have maintained a great documentation.</p>
+
+<p>A few days ago, I need to write a script to automatically configure virtual environment and was hoping Docker could be of use. It turned out that it’s not trivial work to assign static IP to a docker container.</p>
+
+<p>I’m going to try to write this post in a most simple way such that it could benefit the readers with minimum amount of reading, by defining the <strong>problem</strong> and <strong>solution</strong> explicitly.</p>
+
+<h2 id="problem">Problem</h2>
+
+<p>I needed to access my docker container, which may be serving a website or running an application, from other computers in the same local network (e.g., home, office). Another constraint is that the container has to be accessible at the static local IP address assigned to me.</p>
+
+<h2 id="solution">Solution</h2>
+
+<p><em>This solution only applies to OSX users, however, with only minimum tweak, one should be able to easily get it working on Linux and Windows.</em></p>
+
+<ol>
+  <li>
+    <p>Download <a href="https://www.docker.com/products/docker-toolbox">Docker Toolbox</a> and install it. It comes with the following components.</p>
+
+    <blockquote>
+      <ul>
+        <li>Docker Machine for running docker-machine commands</li>
+        <li>Docker Engine for running the docker commands</li>
+        <li>Docker Compose for running the docker-compose commands</li>
+        <li>Kitematic, the Docker GUI</li>
+        <li>a shell preconfigured for a Docker command-line environment</li>
+        <li>Oracle VirtualBox</li>
+      </ul>
+    </blockquote>
+  </li>
+  <li>
+    <p>Install <a href="https://www.vagrantup.com/">Vagrant</a></p>
+  </li>
+  <li>
+    <p>Open <code class="highlighter-rouge">Docker Quickstart Terminal</code>. This mini application starts the terminal after creating a linux virtual machine and running some additional configuration code. If you are using <code class="highlighter-rouge">iTerm</code>, it’s likely that <code class="highlighter-rouge">Quickstart Terminal</code> would not work properly, instead, try run the script <a href="/public/code/docker_ip_mapping/docker_quickstart.sh">here</a>.</p>
+  </li>
+  <li>
+    <p>Now, instead of using the default Docker machine created by the Quickstart script, we’re going to create our own Docker machine, using Vagrant. To create a Vagrant machine, refer to a sample Vagrantfile below.</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1"># -*- mode: ruby -*-</span>
+ <span class="c1"># vi: set ft=ruby :</span>
+ <span class="c1"># Originally written by Xinyu Chen, modified by Xiaowen Zhang</span>
+ <span class="no">Vagrant</span><span class="p">.</span><span class="nf">configure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+
+   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">box</span> <span class="o">=</span> <span class="s2">"ubuntu/trusty64"</span>
+
+   <span class="c1"># Assign a friendly name to this host VM</span>
+     <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">hostname</span> <span class="o">=</span> <span class="s2">"vagrant-docker"</span>
+
+   <span class="c1"># Create a private network, which allows host-only access to the machine using a specific IP.</span>
+   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"private_network"</span><span class="p">,</span> <span class="ss">ip: </span><span class="s2">"192.168.33.10"</span>
+
+   <span class="c1"># Change the IP address to your assigned one [IMPORTANT].</span>
+   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">network</span> <span class="s2">"public_network"</span><span class="p">,</span> <span class="ss">ip: </span><span class="s2">"192.168.3.25"</span>
+
+   <span class="c1"># Adjust number of CPUs and memory allocation here.</span>
+   <span class="n">config</span><span class="p">.</span><span class="nf">vm</span><span class="p">.</span><span class="nf">provider</span> <span class="s2">"virtualbox"</span> <span class="k">do</span> <span class="o">|</span><span class="n">vb</span><span class="o">|</span>
+     <span class="n">vb</span><span class="p">.</span><span class="nf">cpus</span> <span class="o">=</span> <span class="s2">"4"</span>
+     <span class="n">vb</span><span class="p">.</span><span class="nf">memory</span> <span class="o">=</span> <span class="s2">"4096"</span>
+     <span class="n">vb</span><span class="p">.</span><span class="nf">customize</span> <span class="p">[</span><span class="s2">"modifyvm"</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">"--ioapic"</span><span class="p">,</span> <span class="s2">"on"</span><span class="p">]</span>
+     <span class="n">vb</span><span class="p">.</span><span class="nf">customize</span> <span class="p">[</span><span class="s2">"setextradata"</span><span class="p">,</span> <span class="ss">:id</span><span class="p">,</span> <span class="s2">"VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">]</span>
+   <span class="k">end</span>
+
+   <span class="c1"># Always use Vagrant's default insecure key</span>
+   <span class="n">config</span><span class="p">.</span><span class="nf">ssh</span><span class="p">.</span><span class="nf">insert_key</span> <span class="o">=</span> <span class="kp">false</span>
+
+ <span class="k">end</span>
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>Now you can run <code class="highlighter-rouge">vagrant up</code> in the directory the vagrantfile resides. If everything goes well, when you do <code class="highlighter-rouge">vagrant ssh</code>
+, you should be able to see something like below, where the IP address is exactly what we configured.</p>
+
+    <p><img src="/public/image/vagrant_output.png" alt="Vagrant output" /></p>
+  </li>
+  <li>
+    <p>Not only do we need the vm running, we have to tell Docker to use this machine as a Docker vm. Here’s how I did it, based on <a href="http://blog.scottlowe.org/2015/08/04/using-vagrant-docker-machine-together/">Scott’s Weblog</a></p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> docker-machine create -d generic \
+ --generic-ssh-user vagrant \
+ --generic-ssh-key ~/.vagrant.d/insecure_private_key \
+ --generic-ip-address 192.168.33.10 \
+ --engine-install-url "https://test.docker.com" \
+ &lt;name of the vm, up to you&gt;
+</code></pre>
+    </div>
+
+    <p>Run the above in a terminal and after docker finishes creating the vm, run <code class="highlighter-rouge">docker-machine ls</code>, and you should be able to see the vm running</p>
+
+    <p><img src="/public/image/vm_running.jpg" alt="VM runing screenshot" /></p>
+  </li>
+  <li>
+    <p>After docker machine is created, we can run a docker container</p>
+
+    <div class="highlighter-rouge"><pre class="highlight"><code> docker run -d -p 8080:80 nginx
+</code></pre>
+    </div>
+
+    <p>Now we can use any computer in our local network to visit the nginx server that we just created that resides in a container running in a vagrant-based  vm on our computer!</p>
+
+    <p><img src="/public/image/ip_mapped_successful.png" alt="Nginx running" /></p>
+
+    <p>Done.</p>
+  </li>
+</ol>
+
+  </div>
+  
+</div>
+
+<div class="pagination">
+  
+    <span class="pagination-item older">Older</span>
+  
+  
+    <span class="pagination-item newer">Newer</span>
+  
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>
