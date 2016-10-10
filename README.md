@@ -1,3 +1,3 @@
 # Xiaowen Zhang's Personal Website
 
-See the website [here](https://seanxwzhang.github.io)
+See the website [here](http://seanxwzhang.github.io)
