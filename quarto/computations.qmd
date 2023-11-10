@@ -1,0 +1,17 @@
+---
+title: Quarto Computations
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+
+```{python}
+#| label: fig-limits
+#| fig-cap: "Errorbar limit selector"
+
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+fig.set_size_inches(12, 7)
+```
