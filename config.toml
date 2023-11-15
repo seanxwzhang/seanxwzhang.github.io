@@ -2,10 +2,23 @@
 # It's recommended to use Alternate Theme Config to configure FixIt
 # Modifying this file may result in merge conflict
 # =====================================================================================
-baseURL = 'https://example.org/'
+baseURL = 'https://seanzhang.me/'
 languageCode = 'en-us'
-title = 'My New Hugo Site'
+title = 'Sean Zhang'
 theme = 'FixIt'
+
+[markup]
+  [markup.highlight]
+    style = 'onedark'
+
+
+# -------------------------------------------------------------------------------------
+# Quarto related configuration
+# -------------------------------------------------------------------------------------
+ignoreFiles = [ "\\.qmd$", "\\.ipynb$", "\\.py$" ]
+[markup.goldmark.renderer]
+unsafe= true
+
 
 # -------------------------------------------------------------------------------------
 # Menu Configuration
@@ -64,9 +77,9 @@ theme = 'FixIt'
   # FixIt 0.2.15 | CHANGED FixIt theme version
   version = "0.2.X" # e.g. "0.2.X", "0.2.15", "v0.2.15" etc.
   # site description
-  description = ""
+  description = "Sean Zhang"
   # site keywords
-  keywords = ["Hugo", "FixIt"]
+  keywords = ["Engineering", "Statistics", "Machine Learning", "Quantitative Trading"]
   # site default theme ["light", "dark", "auto"]
   defaultTheme = "auto"
   # public git repo url only then enableGitInfo is true
@@ -81,15 +94,16 @@ theme = 'FixIt'
   # FixIt 0.2.12 | NEW enable PWA
   enablePWA = false
   # FixIt 0.2.14 | NEW whether to add external Icon for external links automatically
-  externalIcon = false
+  externalIcon = true
   # FixIt 0.2.14 | NEW FixIt will, by default, inject a theme meta tag in the HTML head on the home page only.
   # You can turn it off, but we would really appreciate if you don’t, as this is a good way to watch FixIt's popularity on the rise.
   disableThemeInject = false
+  favicon = "/favicon.ico" # Path to favicon file
 
   # FixIt 0.2.0 | NEW App icon config
   [params.app]
     # optional site title override for the app when added to an iOS home screen or Android launcher
-    title = "FixIt"
+    title = "SZ"
     # whether to omit favicon resource links
     noFavicon = false
     # modern SVG favicon to use in place of older style .png and .ico files
@@ -105,7 +119,7 @@ theme = 'FixIt'
 
   # FixIt 0.2.0 | NEW Search config
   [params.search]
-    enable = false
+    enable = true
     # type of search engine ["lunr", "algolia", "fuse"]
     type = "lunr"
     # max index length of the chunked content
@@ -145,9 +159,9 @@ theme = 'FixIt'
     # FixIt 0.2.0 | NEW Header title config
     [params.header.title]
       # URL of the LOGO
-      logo = "/fixit.min.svg"
+      logo = "/apple-touch-icon.png"
       # title name
-      name = "My Hugo FixIt Site"
+      name = "Sean Zhang"
       # you can add extra information before the name (HTML format is supported), such as icons
       pre = ""
       # you can add extra information after the name (HTML format is supported), such as icons
