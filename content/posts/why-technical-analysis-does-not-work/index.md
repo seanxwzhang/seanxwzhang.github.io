@@ -1,5 +1,5 @@
 ---
-title: Hello, Quarto
+title: Why Technical Analysis (doesn't) Work
 date: "2012-04-06"
 categories: 
   - Matplotlib
