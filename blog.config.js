@@ -1,5 +1,5 @@
 const BLOG = {
-  title: 'Lontermist',
+  title: 'Rabbit Holes',
   author: 'Sean Zhang',
   email: 'sz@seanzhang.me',
   link: 'https://seanzhang.me',
