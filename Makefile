@@ -11,5 +11,5 @@ dev:
 	source .env.local && \
 	yarn build && \
 	yarn start
-	
+
 build: update
