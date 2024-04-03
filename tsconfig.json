@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types",
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "types": [
+      "node",
+      "webpack-env",
+    ],
+    "paths": {
+      "@/components/*": ["./components/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/assets/*": ["./assets/*"],
+      "@/layouts/*": ["./layouts/*"],
+      "@/styles/*": ["./styles/*"],
+      "@/consts": ["./consts.js"],
+      "@/tailwind.config": ["./tailwind.config.js"],
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
