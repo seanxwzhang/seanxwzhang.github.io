@@ -229,7 +229,7 @@ const FdDemo = () => {
   }, [setCanvasDimensions, canvasRef]);
 
   return (
-    <Container fullWidth={true}>
+    <Container fullWidth={true} hideHeader={true}>
       <div className="flex items-center justify-between">
         <div className="flex-col">
           {isWalking && ( // create a slide in panel for walking, range is 0 to length of curve1
@@ -257,7 +257,7 @@ const FdDemo = () => {
         </div>
         <div className="flex flex-col">
           <button
-            className="ml-4 my-4 bg-transparent bg-cyan-950 hover:bg-gray-100 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+            className="ml-4 my-4 bg-cyan-950 hover:bg-gray-100 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow"
             onClick={() => {
               if (curves.length < 2) {
                 alert("You need to draw 2 curves first");
