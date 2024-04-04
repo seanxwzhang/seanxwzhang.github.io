@@ -62,7 +62,7 @@ body::-webkit-scrollbar-thumb {
 .wrapper {
   min-height: 100vh;
   display: flex;
-  flex-wrap: nowrap;
+  /* flex-wrap: nowrap; */
   align-items: stretch;
   justify-content: flex-start;
   flex-direction: column;
@@ -162,4 +162,8 @@ nav {
 
 .capture-pointer-events * {
   @apply pointer-events-none;
+}
+
+canvas {
+    border: 2px solid rgb(76, 76, 78);
 }
