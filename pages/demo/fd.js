@@ -230,7 +230,7 @@ const FdDemo = () => {
 
   return (
     <Container fullWidth={true} hideHeader={true}>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between bg-day">
         <div className="flex-col">
           {isWalking && ( // create a slide in panel for walking, range is 0 to length of curve1
             <input
