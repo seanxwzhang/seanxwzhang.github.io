@@ -91,9 +91,9 @@ const components = {
 
   /* Overrides */
 
-  toggle_nobelium: ({ block, children }) => (
-    <Toggle block={block}>{children}</Toggle>
-  )
+  // toggle_nobelium: ({ block, children }) => (
+  //   <Toggle block={block}>{children}</Toggle>
+  // )
 }
 
 const mapPageUrl = id => `https://www.notion.so/${id.replace(/-/g, '')}`
@@ -114,15 +114,15 @@ export default function NotionRenderer (props) {
   }[config.font]
 
   // Mark block types to be custom rendered by appending a suffix
-  if (props.recordMap) {
-    for (const { value: block } of Object.values(props.recordMap.block)) {
-      switch (block?.type) {
-        case 'toggle':
-          block.type += '_nobelium'
-          break
-      }
-    }
-  }
+  // if (props.recordMap) {
+  //   for (const { value: block } of Object.values(props.recordMap.block)) {
+  //     switch (block?.type) {
+  //       case 'toggle':
+  //         block.type += '_nobelium'
+  //         break
+  //     }
+  //   }
+  // }
 
   return (
     <>

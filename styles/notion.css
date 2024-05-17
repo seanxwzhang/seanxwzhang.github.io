@@ -249,3 +249,7 @@ pre[class*='language-'] {
 .nobelium-toggle-content > :last-child {
   @apply mb-0;
 }
+
+.notion-asset-caption {
+  text-align: left;
+}
