@@ -9,6 +9,7 @@ import { createHash } from 'crypto'
 import Container from '@/components/Container'
 import Post from '@/components/Post'
 import Comments from '@/components/Comments'
+import FdDemo from '@/demo/fd'
 
 export default function BlogPost ({ post, blockMap, emailHash }) {
   const router = useRouter()
@@ -19,6 +20,8 @@ export default function BlogPost ({ post, blockMap, emailHash }) {
   if (router.isFallback) return null
 
   const fullWidth = post.fullWidth ?? false
+
+  const demo = post.slug == "fid_online" ? <FdDemo></FdDemo> : null;
 
   return (
     <Container
@@ -36,6 +39,8 @@ export default function BlogPost ({ post, blockMap, emailHash }) {
         emailHash={emailHash}
         fullWidth={fullWidth}
       />
+
+      {demo}
 
       {/* Back and Top */}
       <div
@@ -64,7 +69,6 @@ export default function BlogPost ({ post, blockMap, emailHash }) {
           </button>
         </a>
       </div>
-
       <Comments frontMatter={post} />
     </Container>
   )

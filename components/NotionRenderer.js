@@ -6,6 +6,8 @@ import { FONTS_SANS, FONTS_SERIF } from '@/consts'
 import { useConfig } from '@/lib/config'
 import Toggle from '@/components/notion-blocks/Toggle'
 import { Code as CodeComponent } from 'react-notion-x/build/third-party/code'
+// import "prismjs"
+// import 'prismjs/components/prism-cpp.js'
 
 // Lazy-load some heavy components & override the renderers of some block types
 const components = {
