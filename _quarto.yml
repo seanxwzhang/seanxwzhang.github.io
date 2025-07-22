@@ -1,5 +1,6 @@
 project:
   type: website
+  output-dir: docs
 
 website:
   title: "Ramblings on Deep Learning"
@@ -12,6 +13,10 @@ website:
         href: https://x.com/seeeeaaaannnnnn
       - icon: linkedin
         href: https://www.linkedin.com/in/seanxwz/
+      - icon: rss
+        href: index.xml
+  site-url: https://seanzhang.me
+  description: "Ramblings on Deep Learning"
 format:
   html:
     theme:
