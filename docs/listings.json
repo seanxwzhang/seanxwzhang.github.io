@@ -1,0 +1,11 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/hitchhiker_cuda/index.html",
+      "/posts/ssm_lack_sequence_mixing/index.html",
+      "/posts/interactive_fid/index.html",
+      "/posts/em_in_a_nutshell/index.html"
+    ]
+  }
+]
