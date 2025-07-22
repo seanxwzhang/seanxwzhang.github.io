@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "Ramblings on Deep Learning"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/seanxwzhang
+      - icon: twitter
+        href: https://x.com/seeeeaaaannnnnn
+      - icon: linkedin
+        href: https://www.linkedin.com/in/seanxwz/
+format:
+  html:
+    theme:
+      - sandstone
+    css: styles.css
+
+
+

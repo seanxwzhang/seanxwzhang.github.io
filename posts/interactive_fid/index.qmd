@@ -1,0 +1,76 @@
+---
+title: "Interactive FID"
+author: "Sean Zhang"
+date: "2023-11-23"
+categories: [deep learning, image generation]
+image: "fid.png"
+---
+
+## The question
+
+Imagine that you have 2 curves in a 2-D space, **how would you measure the similarity of these 2 curves?**
+
+
+![Two randomly drawn curves in 2D space](fid_1.png){.lightbox}
+
+
+This question turns out to be of great importance, as it helps answer the following question:
+
+- In machine learning, generative models need to be evaluated by comparing the data likelihood of generated output vs. the training dataset
+- In robotics, different movement trajectories need to be compared to evaluate their performance
+- In geographic information systems, trajectories of road, river, movements of animals need to be compared, where a similarity measure needs to be defined
+
+There’re some general properties we wish the distance measure $D$ to have:
+
+1. **Commutativity**: $D(A, B) = D(B, A)$ for curve $A$ and $B$
+2. **Translation invariant**: $D(A+\lambda, B + \lambda) = D(A, B)$, where $A+\lambda$ is to translating all the points on $A$ by $\lambda$
+3. **Definition of zero**: $D(A, A) = 0$
+
+There’re also some properties that we want for the specific case of curves:
+
+1. **Global instead of local**: we want the distance measure to be defined in a global sense, as opposed to relying on specific points on these curve
+2. **Continuous in addition to discrete**: we want the distance measure to have a natural extension to continuous curves
+3. **Insensitive to length**: we don’t want the distance measure to be a function of the length of either curves
+
+It would not be trivial to define a such measure. For example, one can naively define the weighted sum/integral of square distances between all point pairs on these curves, i.e.,
+
+$$
+D = \frac{1}{Z}\int\int\lVert A(t) - B(\tau)\rVert_2^2d\tau dt
+$$
+
+
+where $Z$ could be a normalizing factor to normalize out the effect of length of these 2 curves (otherwise the longer curves are, the more dissimilar they will be, despite that they can be very similar). However, because a close-form solution for the length of any finite curve might not exist, it doesn’t have a nice close-form expression. Another downside is that this formulation is basically describing “on average, how distant a point in curve A is from a point in curve B”, which might not be ideal.
+
+Consider the following 2 curves:
+
+![Two curves with different lengths but almost parallel](fid_2.png){.lightbox}
+
+
+These 2 curves are almost parallel, except one has made a rather zigzag “detour”. If we are doing weight average, the distance between these 2 curves will be dominated by the “detour” as the “detour” takes a larger proportion in the upper curve. This might be something we want, but it neglects the fact that these 2 curves are very similar if we don’t look at the detour.
+
+Is there a way to define a measure such that it doesn’t weight the distance so uniformly? But take into account the overall shape?
+
+## Fréchet Distance 
+
+The Fréchet Distance is defined as:
+
+$$
+\begin{aligned}
+D(A, B) &:= \overbrace{\min_{\alpha, \beta}}^{\text{Taking minimum over function space}}\max_{t\in[0, 1]}\left\{d(A(\alpha(t)), B(\beta(t)))\right\}\\
+\text{where }&A, B\text{ are curves }\\& A, B:[0, 1] \rightarrow \mathcal{R}^2\\
+&\alpha, \beta \text{ are any arbitrary {non-decreasing} scalar function} \\&\alpha, \beta: [0, 1]\rightarrow[0,1] \text{ s.t.}\quad\alpha(\tau_1) \leq\alpha(\tau_2)\quad \forall \tau_1\leq\tau_2\\
+&t\in[0, 1]
+\end{aligned}
+$$
+
+In English, this is to say:
+
+::: {.callout-note}
+Let’s suppose you are walking a dog. You are walking along curve A, the dog is walking along curve B. What’s the shortest leash that allows both you and the dog to finish the walk?
+:::
+
+I’ve found this explanation quite fascinating, because it gives such a good intuition to an otherwise complicated mathematical definition (especially because it’s doing a min over function space).
+
+It’s such a good explanation that I build a [demo](https://www.seanzhang.me/demo/fd) for this.
+
+![Fréchet Distance demo: the distance is indicated by the radius of the circles (all of the same radius); The green lines are the shortest distance from each red points from curve 1 to curve 2, all of the green lines should be shorter than Fréchet distance. ](fid_3.png){.lightbox}
