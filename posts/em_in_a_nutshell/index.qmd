@@ -3,6 +3,7 @@ title: "EM in a nutshell"
 author: "Sean Zhang"
 date: "2019-08-02"
 categories: [deep learning, probability, technical]
+description: "Explaining the EM algorithm in a nutshell"
 image: "em.png"
 ---
 

@@ -4,6 +4,7 @@ author: "Sean Zhang"
 date: "2025-03-05"
 categories: [CUDA, programming, technical]
 image: "warp_tiling_perf.png"
+description: "Walkthrough of writing a SGEMM kernel that achieves 95% of cuBLAS performance"
 bibliography: references.bib
 link-citations: true
 ---

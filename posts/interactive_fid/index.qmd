@@ -3,6 +3,7 @@ title: "Interactive FID"
 author: "Sean Zhang"
 date: "2023-11-23"
 categories: [deep learning, image generation]
+description: "Imagine that you have 2 curves in a 2-D space, how would you measure the similarity of these 2 curves?"
 image: "fid.png"
 ---
 
