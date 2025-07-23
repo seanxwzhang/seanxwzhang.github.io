@@ -1,0 +1,12 @@
+---
+title: "Layout Algebra (1): Introduction"
+author: "Sean Zhang"
+date: "2025-07-22"
+categories: [CUDA, programming, technical]
+image: "warp_tiling_perf.png"
+description: "Introduction to layout algebra"
+link-citations: true
+draft: true
+---
+
+

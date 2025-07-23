@@ -22,5 +22,8 @@
   },
   "posts/hitchhiker_cuda/index.qmd": {
     "index.html": "f16c782b"
+  },
+  "posts/layouts_algebra_1/index.qmd": {
+    "index.html": "9e5bebc0"
   }
 }

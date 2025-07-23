@@ -1,6 +1,5 @@
 ---
 title: "A curious human being"
-image: profile.jpg
 about:
   template: solana # Changed from jolla to solana template which is left-aligned
   links:
@@ -15,6 +14,10 @@ about:
       href: https://github.com/seanxwzhang
 
 ---
+
+::: {.column-margin}
+![](profile.jpg)
+:::
 
 ## About me
 Thanks for visiting my space, this where I learn, think, and write. 
@@ -31,4 +34,10 @@ I currently work at [Manifest AI](https://manifestai.com/), carrying out researc
 
 I also believe in [Longtermism](https://en.wikipedia.org/wiki/Longtermism) where positively influencing the long-term future is the priority of our time. 
 
+## Publications
+
+1. Kumar, S., Buckman, J., Gelada, C., & Zhang, X. (2025). Conformal Transformations for Symmetric Power Transformers. In *First Workshop on Scalable Optimization for Efficient and Adaptive Foundation Models*. [Paper](https://openreview.net/forum?id=PiUgK03Tqd)
+2. Gelada, C., Buckman, J., Zhang, S., & Bach, T. (2025). Scaling Context Requires Rethinking Attention. *arXiv preprint arXiv:2507.04239*. [Paper](https://arxiv.org/abs/2507.04239)
+
+## Contact
 I'm currently based in Vancouver, Canada. I can be reached at sz@seanzhang.me.

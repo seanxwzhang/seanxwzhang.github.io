@@ -4,7 +4,6 @@ project:
 
 website:
   title: "Ramblings on Deep Learning"
-  margin-header: subscribe.html
   navbar:
     right:
       - about.qmd

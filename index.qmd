@@ -1,5 +1,6 @@
 ---
 title: "Ramblings on Deep Learning"
+margin-header: subscribe.html
 listing:
   contents: posts
   sort: "date desc"
