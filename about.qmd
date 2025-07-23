@@ -1,5 +1,6 @@
 ---
 title: "A curious human being"
+image: profile.jpg
 about:
   template: solana # Changed from jolla to solana template which is left-aligned
   links:
@@ -14,10 +15,6 @@ about:
       href: https://github.com/seanxwzhang
 
 ---
-
-::: {.column-margin}
-![](profile.jpg)
-:::
 
 ## About me
 Thanks for visiting my space, this where I learn, think, and write. 

@@ -1,10 +1,17 @@
 [
   {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "A curious human being",
+    "section": "",
+    "text": "Thanks for visiting my space, this where I learn, think, and write.\nMy background is mostly in distributed machine learning systems.\n\nI graduated from University of Michigan (summa cum laude) and Shanghai Jiao Tong University with degrees in both Mechanical Engineering and Electrical Computer Engineering.\nI obtained my Master’s degree from UCLA in Computer Science (specialization: data mining and machine learning).\nI spent 2 years in Meta’s marketplace team working on recommendation systems.\nI spent 2 years in Voleon (largest quant HF in California) working on data and systems.\nI spent 3 years traveling and exploring, learning about the mathematical foundation behind deep learning, implemented various models and architectures, played a lot with GPU kernels.\n\nI currently work at Manifest AI, carrying out research on efficient language modeling.\nI also believe in Longtermism where positively influencing the long-term future is the priority of our time."
+  },
+  {
     "objectID": "about.html#about-me",
     "href": "about.html#about-me",
     "title": "A curious human being",
-    "section": "About me",
-    "text": "About me\nThanks for visiting my space, this where I learn, think, and write.\nMy background is mostly in distributed machine learning systems.\n\nI graduated from University of Michigan (summa cum laude) and Shanghai Jiao Tong University with degrees in both Mechanical Engineering and Electrical Computer Engineering.\nI obtained my Master’s degree from UCLA in Computer Science (specialization: data mining and machine learning).\nI spent 2 years in Meta’s marketplace team working on recommendation systems.\nI spent 2 years in Voleon (largest quant HF in California) working on data and systems.\nI spent 3 years traveling and exploring, learning about the mathematical foundation behind deep learning, implemented various models and architectures, played a lot with GPU kernels.\n\nI currently work at Manifest AI, carrying out research on efficient language modeling.\nI also believe in Longtermism where positively influencing the long-term future is the priority of our time."
+    "section": "",
+    "text": "Thanks for visiting my space, this where I learn, think, and write.\nMy background is mostly in distributed machine learning systems.\n\nI graduated from University of Michigan (summa cum laude) and Shanghai Jiao Tong University with degrees in both Mechanical Engineering and Electrical Computer Engineering.\nI obtained my Master’s degree from UCLA in Computer Science (specialization: data mining and machine learning).\nI spent 2 years in Meta’s marketplace team working on recommendation systems.\nI spent 2 years in Voleon (largest quant HF in California) working on data and systems.\nI spent 3 years traveling and exploring, learning about the mathematical foundation behind deep learning, implemented various models and architectures, played a lot with GPU kernels.\n\nI currently work at Manifest AI, carrying out research on efficient language modeling.\nI also believe in Longtermism where positively influencing the long-term future is the priority of our time."
   },
   {
     "objectID": "about.html#publications",
