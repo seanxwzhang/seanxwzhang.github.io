@@ -12,4 +12,3 @@ page-layout: full
 title-block-banner: true
 ---
 
-<meta name="follow.it-verification-code" content="Ku21dyG4kNdrqbwpXqYZ"/>
