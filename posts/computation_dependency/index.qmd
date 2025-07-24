@@ -1,0 +1,96 @@
+---
+title: "Computation Dependency"
+author: "Sean Zhang"
+date: "2025-07-22"
+categories: [CUDA, programming, technical]
+image: "warp_tiling_perf.png"
+description: "Introduction to computation dependency"
+link-citations: true
+draft: true
+---
+
+One of the fundamental task in any parallel programming paradigm is to find the "axis" in which to parallelize/decompose a problem. Some are easy to do, some are hard.
+
+Suppose we are adding $1$ to a vector $x\in \mathbb{R}^n$. It's easy to parallelize because our instinct tells us how to break down the problem into $n$ elementary addition subproblems. If we visualize the data dependency graph, it looks like the following:
+
+```{mermaid}
+flowchart TD
+    %% Input nodes (green circles)
+    x1((x1)):::inputNode
+    x2((x2)):::inputNode  
+    x3((x3)):::inputNode
+    x4((x4)):::inputNode
+    x5((x5)):::inputNode
+    x6((x6)):::inputNode
+    x7((x7)):::inputNode
+    x8((x8)):::inputNode
+    
+    %% Add one operation nodes (orange rounded boxes)
+    a1("+1"):::addNode
+    a2("+1"):::addNode
+    a3("+1"):::addNode
+    a4("+1"):::addNode
+    a5("+1"):::addNode
+    a6("+1"):::addNode
+    a7("+1"):::addNode
+    a8("+1"):::addNode
+    
+    %% Output nodes (coral circles)
+    y1((y1)):::outputNode
+    y2((y2)):::outputNode
+    y3((y3)):::outputNode
+    y4((y4)):::outputNode
+    y5((y5)):::outputNode
+    y6((y6)):::outputNode
+    y7((y7)):::outputNode
+    y8((y8)):::outputNode
+    
+    %% Connections
+    x1 --> a1 --> y1
+    x2 --> a2 --> y2
+    x3 --> a3 --> y3
+    x4 --> a4 --> y4
+    x5 --> a5 --> y5
+    x6 --> a6 --> y6
+    x7 --> a7 --> y7
+    x8 --> a8 --> y8
+    
+    %% Styling classes
+    classDef inputNode fill:#90EE90,stroke:#333,stroke-width:2px,color:#000,font-size:12pt,height:2em
+    classDef addNode fill:#FFA500,stroke:#333,stroke-width:2px,color:#fff,font-weight:bold,font-size:12pt
+    classDef outputNode fill:#F08080,stroke:#333,stroke-width:2px,color:#000,font-size:12pt
+```
+
+It's easy to see that there're isolated "islands" in this computation graph, among which there's no dependency. And this is precisely why we can parallelize the computation. 
+
+Now suppose we want to do reduction over the vector $x$ into a single scalar. The data dependency graph looks like the following:
+
+```{mermaid}
+flowchart TD
+  x1((x1)):::inputNode
+  x2((x2)):::inputNode
+  x3((x3)):::inputNode
+  x4((x4)):::inputNode
+  x5((x5)):::inputNode
+  x6((x6)):::inputNode
+  x7((x7)):::inputNode
+  x8((x8)):::inputNode
+  
+  y((y)):::outputNode
+
+  x1 --> y
+  x2 --> y
+  x3 --> y
+  x4 --> y
+  x5 --> y
+  x6 --> y
+  x7 --> y
+  x8 --> y
+
+  classDef inputNode fill:#90EE90,stroke:#333,stroke-width:2px,color:#000,font-size:12pt
+  classDef outputNode fill:#F08080,stroke:#333,stroke-width:2px,color:#000,font-size:12pt
+```
+
+
+# Layouts
+

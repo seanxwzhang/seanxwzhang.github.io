@@ -9,4 +9,19 @@ link-citations: true
 draft: true
 ---
 
+When writing code that involves multi-dimensional arrays, it's common to encouter the concept of "layout". For example
+
+# Layouts
+
+The 
+
+
+```{python}
+import cutlass
+import cutlass.cute as cute
+
+layout = cute.make_layout((2, (1, 6)), stride=(1, (cutlass.Int32(6), 2)))
+print(layout)
+print(cute.coalesce(layout))
+```
 

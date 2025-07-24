@@ -1,0 +1,12 @@
+{
+  "hash": "93f606591e388487ec34406807f7a6c7",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Layout Algebra (1): Introduction\"\nauthor: \"Sean Zhang\"\ndate: \"2025-07-22\"\ncategories: [CUDA, programming, technical]\nimage: \"warp_tiling_perf.png\"\ndescription: \"Introduction to layout algebra\"\nlink-citations: true\ndraft: true\n---\n\nWhen writing code that involves multi-dimensional arrays, it's common to encouter the concept of \"layout\". For example\n\n# Layouts\n\nThe \n\n::: {#79a9a762 .cell execution_count=1}\n``` {.python .cell-code}\nimport numpy as np\n\na = np.array([[1, 2, 3], [4, 5, 6]])\nb = np.array([[7, 8, 9], [10, 11, 12]])\n\nc = a + b\nprint(c)\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[[ 8 10 12]\n [14 16 18]]\n```\n:::\n:::\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

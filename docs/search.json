@@ -180,5 +180,12 @@
     "title": "Ramblings on Deep Learning",
     "section": "",
     "text": "A hitchhiker’s guide to CUDA programming\n\n\n\nCUDA\n\nprogramming\n\ntechnical\n\n\n\nWalkthrough of writing a SGEMM kernel that achieves 95% of cuBLAS performance\n\n\n\n\n\nMar 5, 2025\n\n\nSean Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nSSM lacks sequence mixing\n\n\n\ndeep learning\n\nsequence modeling\n\ntechnical\n\n\n\nEvery architecture contains some implicit trade-offs. My impression is SSMs are a good sequential architecture for modalities where interactions within a sequence matters less than a good compression of past states.\n\n\n\n\n\nMar 2, 2024\n\n\nSean Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nInteractive FID\n\n\n\ndeep learning\n\nimage generation\n\n\n\nImagine that you have 2 curves in a 2-D space, how would you measure the similarity of these 2 curves?\n\n\n\n\n\nNov 23, 2023\n\n\nSean Zhang\n\n\n\n\n\n\n\n\n\n\n\n\nEM in a nutshell\n\n\n\ndeep learning\n\nprobability\n\ntechnical\n\n\n\nExplaining the EM algorithm in a nutshell\n\n\n\n\n\nAug 2, 2019\n\n\nSean Zhang\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/layouts_algebra_1/index.html",
+    "href": "posts/layouts_algebra_1/index.html",
+    "title": "Layout Algebra (1): Introduction",
+    "section": "",
+    "text": "When writing code that involves multi-dimensional arrays, it’s common to encouter the concept of “layout”. For example\n\nLayouts\nThe\n\nimport numpy as np\n\na = np.array([[1, 2, 3], [4, 5, 6]])\nb = np.array([[7, 8, 9], [10, 11, 12]])\n\nc = a + b\nprint(c)\n\n[[ 8 10 12]\n [14 16 18]]"
   }
 ]
