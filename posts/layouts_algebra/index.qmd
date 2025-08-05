@@ -1,15 +1,15 @@
 ---
-title: "Layout Algebra (1): Introduction"
+title: "Layout Algebra"
 author: "Sean Zhang"
 date: "2025-07-22"
 categories: [CUDA, programming, technical]
 image: "warp_tiling_perf.png"
-description: "Introduction to layout algebra"
+description: "Why layouts are the fundmamental building blocks of modern GPU programming"
 link-citations: true
 draft: true
 ---
 
-When writing code that involves multi-dimensional arrays, it's common to encouter the concept of "layout". For example
+When writing code that involves multi-dimensional arrays, it's common to encouter the concept of "layout". For example, 
 
 # Layouts
 
