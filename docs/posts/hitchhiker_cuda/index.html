@@ -97,7 +97,7 @@ div.csl-indent {
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-5bf7ca59d8cc7f7a8155307016a58e21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-2e59cd003863b01633e47cbf423229e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -162,7 +162,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="floating nav-fixed slimcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
@@ -211,7 +211,7 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">A hitchhiker’s guide to CUDA programming</h1>
@@ -251,9 +251,47 @@ window.Quarto = {
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#starting-from-the-basics" id="toc-starting-from-the-basics" class="nav-link" data-scroll-target="#starting-from-the-basics">Starting from the basics</a>
+  <ul class="collapse">
+  <li><a href="#gpu-hardware" id="toc-gpu-hardware" class="nav-link" data-scroll-target="#gpu-hardware">GPU Hardware</a>
+  <ul class="collapse">
+  <li><a href="#memory-hierarchy" id="toc-memory-hierarchy" class="nav-link" data-scroll-target="#memory-hierarchy">Memory Hierarchy</a></li>
+  </ul></li>
+  <li><a href="#gpu-execution-model" id="toc-gpu-execution-model" class="nav-link" data-scroll-target="#gpu-execution-model">GPU Execution Model</a>
+  <ul class="collapse">
+  <li><a href="#simt" id="toc-simt" class="nav-link" data-scroll-target="#simt">SIMT</a></li>
+  <li><a href="#execution-hierarchy" id="toc-execution-hierarchy" class="nav-link" data-scroll-target="#execution-hierarchy">Execution Hierarchy</a></li>
+  <li><a href="#latency-hiding" id="toc-latency-hiding" class="nav-link" data-scroll-target="#latency-hiding">Latency Hiding</a></li>
+  <li><a href="#occupancy" id="toc-occupancy" class="nav-link" data-scroll-target="#occupancy">Occupancy</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#matrix-multiplication" id="toc-matrix-multiplication" class="nav-link" data-scroll-target="#matrix-multiplication">Matrix Multiplication</a>
+  <ul class="collapse">
+  <li><a href="#naive" id="toc-naive" class="nav-link" data-scroll-target="#naive">Naive</a></li>
+  <li><a href="#shared-memory-caching" id="toc-shared-memory-caching" class="nav-link" data-scroll-target="#shared-memory-caching">Shared Memory Caching</a></li>
+  <li><a href="#thread-tiling" id="toc-thread-tiling" class="nav-link" data-scroll-target="#thread-tiling">Thread Tiling</a></li>
+  <li><a href="#vectorized-access-coalesced-access" id="toc-vectorized-access-coalesced-access" class="nav-link" data-scroll-target="#vectorized-access-coalesced-access">Vectorized Access &amp; Coalesced Access</a></li>
+  <li><a href="#data-prefetchingpipelining" id="toc-data-prefetchingpipelining" class="nav-link" data-scroll-target="#data-prefetchingpipelining">Data prefetching/pipelining</a></li>
+  <li><a href="#swizzle" id="toc-swizzle" class="nav-link" data-scroll-target="#swizzle">Swizzle</a></li>
+  <li><a href="#warp-tiling" id="toc-warp-tiling" class="nav-link" data-scroll-target="#warp-tiling">Warp Tiling</a></li>
+  <li><a href="#split-k" id="toc-split-k" class="nav-link" data-scroll-target="#split-k">Split-K</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a>
+  <ul class="collapse">
+  <li><a href="#credits" id="toc-credits" class="nav-link" data-scroll-target="#credits">Credits</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
     </div>
 <!-- main -->
 <main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">

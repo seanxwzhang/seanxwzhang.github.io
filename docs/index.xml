@@ -10,7 +10,31 @@
 <atom:link href="https://seanzhang.me/index.xml" rel="self" type="application/rss+xml"/>
 <description>Ramblings on Deep Learning</description>
 <generator>quarto-1.7.32</generator>
-<lastBuildDate>Wed, 05 Mar 2025 08:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 22 Jul 2025 04:00:00 GMT</lastBuildDate>
+<item>
+  <title></title>
+  <dc:creator>Sean Zhang</dc:creator>
+  <link>https://seanzhang.me/posts/computation_dependency/</link>
+  <description><![CDATA[ undefined ]]></description>
+  <category>CUDA</category>
+  <category>programming</category>
+  <category>technical</category>
+  <guid>https://seanzhang.me/posts/computation_dependency/</guid>
+  <pubDate>Tue, 22 Jul 2025 04:00:00 GMT</pubDate>
+  <media:content url="https://seanzhang.me/posts/computation_dependency/warp_tiling_perf.png" medium="image" type="image/png"/>
+</item>
+<item>
+  <title>Layout Algebra</title>
+  <dc:creator>Sean Zhang</dc:creator>
+  <link>https://seanzhang.me/posts/layouts_algebra/</link>
+  <description><![CDATA[ Why layouts are the fundmamental building blocks of modern GPU programming ]]></description>
+  <category>CUDA</category>
+  <category>programming</category>
+  <category>technical</category>
+  <guid>https://seanzhang.me/posts/layouts_algebra/</guid>
+  <pubDate>Tue, 22 Jul 2025 04:00:00 GMT</pubDate>
+  <media:content url="https://seanzhang.me/posts/layouts_algebra/warp_tiling_perf.png" medium="image" type="image/png"/>
+</item>
 <item>
   <title>A hitchhiker’s guide to CUDA programming</title>
   <dc:creator>Sean Zhang</dc:creator>
@@ -20,7 +44,7 @@
   <category>programming</category>
   <category>technical</category>
   <guid>https://seanzhang.me/posts/hitchhiker_cuda/</guid>
-  <pubDate>Wed, 05 Mar 2025 08:00:00 GMT</pubDate>
+  <pubDate>Wed, 05 Mar 2025 05:00:00 GMT</pubDate>
   <media:content url="https://seanzhang.me/posts/hitchhiker_cuda/warp_tiling_perf.png" medium="image" type="image/png" height="121" width="144"/>
 </item>
 <item>
@@ -32,7 +56,7 @@
   <category>sequence modeling</category>
   <category>technical</category>
   <guid>https://seanzhang.me/posts/ssm_lack_sequence_mixing/</guid>
-  <pubDate>Sat, 02 Mar 2024 08:00:00 GMT</pubDate>
+  <pubDate>Sat, 02 Mar 2024 05:00:00 GMT</pubDate>
   <media:content url="https://seanzhang.me/posts/ssm_lack_sequence_mixing/mamba.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 <item>
@@ -43,7 +67,7 @@
   <category>deep learning</category>
   <category>image generation</category>
   <guid>https://seanzhang.me/posts/interactive_fid/</guid>
-  <pubDate>Thu, 23 Nov 2023 08:00:00 GMT</pubDate>
+  <pubDate>Thu, 23 Nov 2023 05:00:00 GMT</pubDate>
   <media:content url="https://seanzhang.me/posts/interactive_fid/fid.png" medium="image" type="image/png" height="74" width="144"/>
 </item>
 <item>
@@ -55,7 +79,7 @@
   <category>probability</category>
   <category>technical</category>
   <guid>https://seanzhang.me/posts/em_in_a_nutshell/</guid>
-  <pubDate>Fri, 02 Aug 2019 07:00:00 GMT</pubDate>
+  <pubDate>Fri, 02 Aug 2019 04:00:00 GMT</pubDate>
   <media:content url="https://seanzhang.me/posts/em_in_a_nutshell/em.png" medium="image" type="image/png" height="144" width="144"/>
 </item>
 </channel>

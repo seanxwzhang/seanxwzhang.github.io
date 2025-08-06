@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: docs
+  render:
+    - "*.qmd"
+    - "*.md"
+    - "*.ipynb"
+    - "!external/"
 
 website:
   title: "Ramblings on Deep Learning"
@@ -22,6 +27,9 @@ format:
     theme:
       - sandstone
     css: styles.css
+    toc: true
+    toc-location: left
+    toc-depth: 3
 
 
 

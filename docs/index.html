@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5bf7ca59d8cc7f7a8155307016a58e21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-2e59cd003863b01633e47cbf423229e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -132,7 +132,7 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 <link rel="alternate" type="application/rss+xml" title="Ramblings on Deep Learning" href="index.xml" data-external="1"></head>
 
-<body class="nav-fixed quarto-light">
+<body class="floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
@@ -181,7 +181,7 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page-left">
       <h1 class="title">Ramblings on Deep Learning</h1>
@@ -199,6 +199,8 @@ window.Quarto = {
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
+  
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar"><div class="quarto-margin-header"><div class="margin-header-item">
 <div id="mc_embed_shell">
@@ -333,8 +335,7 @@ var $mcj = jQuery.noConflict(true);
 </div>
 
 </div></div>
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(4)</span></div><div class="category" data-category="Q1VEQQ==">CUDA <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGVlcCUyMGxlYXJuaW5n">deep learning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="aW1hZ2UlMjBnZW5lcmF0aW9u">image generation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cHJvYmFiaWxpdHk=">probability <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cHJvZ3JhbW1pbmc=">programming <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2VxdWVuY2UlMjBtb2RlbGluZw==">sequence modeling <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGVjaG5pY2Fs">technical <span class="quarto-category-count">(3)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Q1VEQQ==">CUDA <span class="quarto-category-count">(3)</span></div><div class="category" data-category="ZGVlcCUyMGxlYXJuaW5n">deep learning <span class="quarto-category-count">(3)</span></div><div class="category" data-category="aW1hZ2UlMjBnZW5lcmF0aW9u">image generation <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cHJvYmFiaWxpdHk=">probability <span class="quarto-category-count">(1)</span></div><div class="category" data-category="cHJvZ3JhbW1pbmc=">programming <span class="quarto-category-count">(3)</span></div><div class="category" data-category="c2VxdWVuY2UlMjBtb2RlbGluZw==">sequence modeling <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGVjaG5pY2Fs">technical <span class="quarto-category-count">(5)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -348,7 +349,75 @@ var $mcj = jQuery.noConflict(true);
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Q1VEQSUyQ3Byb2dyYW1taW5nJTJDdGVjaG5pY2Fs" data-listing-date-sort="1741161600000" data-listing-file-modified-sort="1753249220118" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="115" data-listing-word-count-sort="22845">
+<div class="quarto-post image-right" data-index="0" data-categories="Q1VEQSUyQ3Byb2dyYW1taW5nJTJDdGVjaG5pY2Fs" data-listing-date-sort="1753156800000" data-listing-file-modified-sort="1754415652067" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="415">
+<div class="thumbnail"><a href="./posts/computation_dependency/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/computation_dependency/warp_tiling_perf.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/computation_dependency/index.html" class="no-external">Computation Dependency</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q1VEQQ=='); return false;">CUDA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cHJvZ3JhbW1pbmc='); return false;">programming</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVjaG5pY2Fs'); return false;">technical</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/computation_dependency/index.html" class="no-external">
+<p>Introduction to computation dependency</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/computation_dependency/index.html" class="no-external">
+<div class="listing-date">
+Jul 22, 2025
+</div>
+<div class="listing-author">
+Sean Zhang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="Q1VEQSUyQ3Byb2dyYW1taW5nJTJDdGVjaG5pY2Fs" data-listing-date-sort="1753156800000" data-listing-file-modified-sort="1754515327248" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="869">
+<div class="thumbnail"><a href="./posts/layouts_algebra/index.html" class="no-external">
+
+<img loading="lazy" src="./posts/layouts_algebra/warp_tiling_perf.png" class="thumbnail-image">
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/layouts_algebra/index.html" class="no-external">Layout Algebra</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('Q1VEQQ=='); return false;">CUDA</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('cHJvZ3JhbW1pbmc='); return false;">programming</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGVjaG5pY2Fs'); return false;">technical</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/layouts_algebra/index.html" class="no-external">
+<p>Why layouts are the fundmamental building blocks of modern GPU programming</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/layouts_algebra/index.html" class="no-external">
+<div class="listing-date">
+Jul 22, 2025
+</div>
+<div class="listing-author">
+Sean Zhang
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="Q1VEQSUyQ3Byb2dyYW1taW5nJTJDdGVjaG5pY2Fs" data-listing-date-sort="1741150800000" data-listing-file-modified-sort="1754414522512" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="115" data-listing-word-count-sort="22845">
 <div class="thumbnail"><a href="./posts/hitchhiker_cuda/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/hitchhiker_cuda/warp_tiling_perf.png" class="thumbnail-image">
@@ -382,7 +451,7 @@ Sean Zhang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="ZGVlcCUyMGxlYXJuaW5nJTJDc2VxdWVuY2UlMjBtb2RlbGluZyUyQ3RlY2huaWNhbA==" data-listing-date-sort="1709366400000" data-listing-file-modified-sort="1753225493918" data-listing-date-modified-sort="1753167600000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1846">
+<div class="quarto-post image-right" data-index="3" data-categories="ZGVlcCUyMGxlYXJuaW5nJTJDc2VxdWVuY2UlMjBtb2RlbGluZyUyQ3RlY2huaWNhbA==" data-listing-date-sort="1709355600000" data-listing-file-modified-sort="1754414522544" data-listing-date-modified-sort="1753156800000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1846">
 <div class="thumbnail"><a href="./posts/ssm_lack_sequence_mixing/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/ssm_lack_sequence_mixing/mamba.png" class="thumbnail-image">
@@ -416,7 +485,7 @@ Sean Zhang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="ZGVlcCUyMGxlYXJuaW5nJTJDaW1hZ2UlMjBnZW5lcmF0aW9u" data-listing-date-sort="1700726400000" data-listing-file-modified-sort="1753244610409" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="616">
+<div class="quarto-post image-right" data-index="4" data-categories="ZGVlcCUyMGxlYXJuaW5nJTJDaW1hZ2UlMjBnZW5lcmF0aW9u" data-listing-date-sort="1700715600000" data-listing-file-modified-sort="1754414522544" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="616">
 <div class="thumbnail"><a href="./posts/interactive_fid/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/interactive_fid/fid.png" class="thumbnail-image">
@@ -448,7 +517,7 @@ Sean Zhang
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="3" data-categories="ZGVlcCUyMGxlYXJuaW5nJTJDcHJvYmFiaWxpdHklMkN0ZWNobmljYWw=" data-listing-date-sort="1564729200000" data-listing-file-modified-sort="1753244630189" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="511">
+<div class="quarto-post image-right" data-index="5" data-categories="ZGVlcCUyMGxlYXJuaW5nJTJDcHJvYmFiaWxpdHklMkN0ZWNobmljYWw=" data-listing-date-sort="1564718400000" data-listing-file-modified-sort="1754414522508" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="511">
 <div class="thumbnail"><a href="./posts/em_in_a_nutshell/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/em_in_a_nutshell/em.png" class="thumbnail-image">

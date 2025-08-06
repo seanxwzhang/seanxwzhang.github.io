@@ -2,6 +2,8 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/computation_dependency/index.html",
+      "/posts/layouts_algebra/index.html",
       "/posts/hitchhiker_cuda/index.html",
       "/posts/ssm_lack_sequence_mixing/index.html",
       "/posts/interactive_fid/index.html",
