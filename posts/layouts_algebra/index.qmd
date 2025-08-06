@@ -45,6 +45,8 @@ p.show()
 *Note that the numbers in the tensors indicate the physical offset, not the data value.*
 
 Now, we might want to split the copy operations into one of two ways:
+* Tile-wise copy: each thread copies a tile of the source tensor to a tile of the destination tensor.
+* Strided copy: each thread copies a single element of the source tensor to a single element of the destination tensor.
 
 :::{.column-body-outset}
 ::: {.columns}
@@ -54,7 +56,7 @@ Now, we might want to split the copy operations into one of two ways:
 from plotter import Layout, LayoutPlotter, T, _, Coord
 
 l = Layout(T(8, 8), T(1, 8))
-p = LayoutPlotter(l, title="Source Tensor, block-wise copy")
+p = LayoutPlotter(l, title="Source Tensor, tile copy")
 p.slice((0, 0), color="red").slice((0, 1), color="red").slice((0, 2), color="green").slice((0, 3), color="green").slice((0, 4), color="blue").slice((0, 5), color="blue").slice((0, 6), color="orange").slice((0, 7), color="orange").show()
 ```
 :::
@@ -72,7 +74,7 @@ p.slice((0, 0), color="red").slice((4, 0), color="red").slice((0, 1), color="gre
 :::
 :::
 
-Here we use color to indicate the thread that is responsible for copying the data. To understand effect of different copy strategies, we can 
+Here different colors indicate the thread that is responsible for copying the data.To understand effect of different copy strategies, we can 
 
 
 **Traditional Approach**

@@ -86,23 +86,23 @@ __global__ void copy_kernel_v2(float *src, float *dst) {
 }
 
 enum struct Flavor {
-    SIMPLE,
+    TILE,
     STRIDE,
-    LAYOUT,
+    LAYOUT_TILE,
     FRGTHR,
     FRGTHR_STRIDE
 };
 
 #define FLAVOR_SWITCH(flavor, CONST_NAME, ...)                     \
 [&] {                                                           \
-    if (flavor == Flavor::SIMPLE)                               \
+    if (flavor == Flavor::TILE)                               \
     {                                                           \
-        constexpr static Flavor CONST_NAME = Flavor::SIMPLE;    \
+        constexpr static Flavor CONST_NAME = Flavor::TILE;    \
         return __VA_ARGS__();                                   \
     }                                                           \
-    else if (flavor == Flavor::LAYOUT)                          \
+    else if (flavor == Flavor::LAYOUT_TILE)                          \
     {                                                           \
-        constexpr static Flavor CONST_NAME = Flavor::LAYOUT;    \
+        constexpr static Flavor CONST_NAME = Flavor::LAYOUT_TILE;    \
         return __VA_ARGS__();                                   \
     }                                                           \
     else if (flavor == Flavor::FRGTHR)                          \
@@ -246,9 +246,9 @@ void run(float *src, float *dst, cudaStream_t stream = 0) {
     constexpr int stride_y_src = width;
     constexpr int stride_x_dst = height;
     constexpr int stride_y_dst = 1;
-    if constexpr (flavor == Flavor::SIMPLE) {
+    if constexpr (flavor == Flavor::TILE) {
         copy_kernel_v0<<<1, thread_num, 0, stream>>>(src, dst, width, height, stride_x_src, stride_y_src, stride_x_dst, stride_y_dst);
-    } else if constexpr (flavor == Flavor::LAYOUT) {
+    } else if constexpr (flavor == Flavor::LAYOUT_TILE) {
         using src_layout = decltype(make_layout(Shape<Int<width>, Int<height>>{}, Stride<Int<stride_x_src>, Int<stride_y_src>>{}));
         using dst_layout = decltype(make_layout(Shape<Int<width>, Int<height>>{}, Stride<Int<stride_x_dst>, Int<stride_y_dst>>{}));
         copy_kernel_v1<src_layout, dst_layout><<<1, thread_num, 0, stream>>>(src, dst);
@@ -272,9 +272,9 @@ void run(float *src, float *dst, cudaStream_t stream = 0) {
 template <int width, int height, int thread_num>
 void run_all_flavors(float *src, float *dst, cudaStream_t stream) {
     const std::vector<std::pair<Flavor, std::string>> flavors = {
-        {Flavor::SIMPLE, "SIMPLE"},
+        {Flavor::TILE, "TILE"},
         {Flavor::STRIDE, "STRIDE"}, 
-        {Flavor::LAYOUT, "LAYOUT"},
+        {Flavor::LAYOUT_TILE, "LAYOUT_TILE"},
         {Flavor::FRGTHR, "FRGTHR"},
         {Flavor::FRGTHR_STRIDE, "FRGTHR_STRIDE"}
     };
