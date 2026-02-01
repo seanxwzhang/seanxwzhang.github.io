@@ -3,7 +3,6 @@ import mdx from '@astrojs/mdx';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
-import vercel from '@astrojs/vercel';
 
 export default defineConfig({
   site: 'https://seanzhang.me',
@@ -14,11 +13,6 @@ export default defineConfig({
     tailwind(),
   ],
   output: 'static',
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true,
-    },
-  }),
   markdown: {
     shikiConfig: {
       theme: 'github-light',
