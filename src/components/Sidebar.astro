@@ -1,0 +1,296 @@
+---
+import { getCollection } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+interface Props {
+  currentSlug?: string;
+}
+
+const { currentSlug } = Astro.props;
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const otherPosts = currentSlug
+  ? sortedPosts.filter(p => p.slug !== currentSlug)
+  : sortedPosts;
+
+const categories = [
+  { name: 'Deep Learning', slug: 'deep-learning' },
+  { name: 'Engineering', slug: 'engineering' },
+  { name: 'Market', slug: 'market' },
+];
+---
+
+<aside
+  class="sidebar"
+  id="sidebar"
+  style="view-transition-name: sidebar"
+>
+  <!-- Toggle Button -->
+  <button
+    id="sidebar-toggle"
+    class="sidebar-toggle"
+    aria-label="Toggle sidebar"
+    title="Toggle sidebar"
+  >
+    <svg class="toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  </button>
+
+  <!-- Sidebar Content -->
+  <div class="sidebar-content">
+    <!-- Site Title -->
+    <a
+      href="/"
+      class="block font-serif text-xl font-semibold text-ink hover:text-coral transition-colors mb-6 px-4"
+    >
+      Steady State
+    </a>
+
+  <!-- Categories Section -->
+  <nav class="sidebar-categories px-4 mb-6">
+    <h3 class="text-xs font-medium text-ink-muted uppercase tracking-wider mb-3">Categories</h3>
+    <ul class="space-y-1">
+      {categories.map(cat => (
+        <li>
+          <a
+            href={`/categories/${cat.slug}`}
+            class="block py-1.5 text-sm text-ink-light hover:text-coral transition-colors"
+          >
+            {cat.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  <!-- Divider -->
+  <div class="border-t border-cream-300 mx-4 mb-4"></div>
+
+  <!-- Posts Section -->
+  <div class="sidebar-posts flex-1 overflow-hidden flex flex-col">
+    <h3 class="text-xs font-medium text-ink-muted uppercase tracking-wider mb-3 px-4">Posts</h3>
+    <div class="flex-1 overflow-y-auto px-1 pb-4 scrollbar-thin">
+      <div class="space-y-1">
+        {otherPosts.map(post => (
+          <PostCard
+            title={post.data.title}
+            slug={post.slug}
+            date={post.data.date}
+            variant="compact"
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+
+    <!-- Footer Links -->
+    <div class="border-t border-cream-300 px-4 py-3 mt-auto">
+      <div class="flex items-center gap-4 text-sm">
+        <a href="/about" class="text-ink-muted hover:text-coral transition-colors">About</a>
+        <a href="/rss.xml" class="text-ink-muted hover:text-coral transition-colors" title="RSS Feed">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script is:inline>
+  (function() {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebar-toggle');
+
+    if (!sidebar || !toggle) return;
+
+    // Check localStorage for saved state
+    const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+    if (isCollapsed) {
+      sidebar.classList.add('collapsed');
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) mainContent.classList.add('sidebar-collapsed');
+    }
+
+    // Remove any existing listener (in case of re-render)
+    const newToggle = toggle.cloneNode(true);
+    toggle.parentNode.replaceChild(newToggle, toggle);
+
+    newToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+      const nowCollapsed = sidebar.classList.contains('collapsed');
+      localStorage.setItem('sidebar-collapsed', String(nowCollapsed));
+
+      // Update main content margin
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        if (nowCollapsed) {
+          mainContent.classList.add('sidebar-collapsed');
+        } else {
+          mainContent.classList.remove('sidebar-collapsed');
+        }
+      }
+    });
+  })();
+</script>
+
+<style>
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: white;
+    border-right: 1px solid theme('colors.cream.300');
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    z-index: 40;
+    transition: width 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+  }
+
+  /* Toggle button */
+  .sidebar-toggle {
+    position: absolute;
+    right: -14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: white;
+    border: 1px solid theme('colors.cream.300');
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 50;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .sidebar-toggle:hover {
+    background: theme('colors.cream.100');
+  }
+
+  .toggle-icon {
+    color: theme('colors.ink.muted');
+    transition: transform 0.3s ease;
+  }
+
+  /* Collapsed state */
+  .sidebar.collapsed {
+    width: 0;
+    border-right: none;
+  }
+
+  .sidebar.collapsed .sidebar-content {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar.collapsed .sidebar-toggle {
+    right: -42px;
+  }
+
+  .sidebar.collapsed .toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  /* Hover expansion effect */
+  .sidebar:not(.collapsed):hover {
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Custom scrollbar for posts section */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: theme('colors.cream.400');
+    border-radius: 2px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.cream.300');
+  }
+
+  /* Mobile: Sidebar becomes a bottom drawer */
+  @media (max-width: 1024px) {
+    .sidebar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: auto;
+      width: 100%;
+      height: auto;
+      max-height: 70vh;
+      border-right: none;
+      border-top: 1px solid theme('colors.cream.300');
+      border-radius: 1rem 1rem 0 0;
+      padding-top: 1rem;
+      transform: translateY(calc(100% - 56px));
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar.collapsed {
+      width: 100%;
+      transform: translateY(100%);
+    }
+
+    .sidebar.collapsed .sidebar-toggle {
+      right: auto;
+      left: 50%;
+      top: -42px;
+      transform: translateX(-50%);
+    }
+
+    .sidebar.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    .sidebar:not(.collapsed) .toggle-icon {
+      transform: rotate(90deg);
+    }
+
+    .sidebar:hover,
+    .sidebar:focus-within {
+      transform: translateY(0);
+    }
+
+    .sidebar::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      background: theme('colors.cream.400');
+      border-radius: 2px;
+      margin: 0 auto 1rem;
+    }
+
+    .sidebar-toggle {
+      right: auto;
+      left: 50%;
+      top: -14px;
+      transform: translateX(-50%);
+    }
+  }
+</style>

@@ -1,0 +1,102 @@
+/* View Transition Animations */
+
+/* Sidebar slide-in from left */
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Content expand animation */
+@keyframes expand-content {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shrink-content {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* Fade animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* View transition styles for sidebar */
+::view-transition-old(sidebar) {
+  animation: slide-out-left 0.3s ease-out both;
+}
+
+::view-transition-new(sidebar) {
+  animation: slide-in-left 0.3s ease-out both;
+}
+
+/* View transition styles for main content */
+::view-transition-old(post-content) {
+  animation: shrink-content 0.3s ease-out both;
+}
+
+::view-transition-new(post-content) {
+  animation: expand-content 0.3s ease-out both;
+}
+
+/* Default page transition */
+::view-transition-old(root) {
+  animation: fade-out 0.2s ease-out both;
+}
+
+::view-transition-new(root) {
+  animation: fade-in 0.2s ease-out both;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

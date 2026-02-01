@@ -1,5 +1,5 @@
 ---
-import BaseLayout from './BaseLayout.astro';
+import SidebarLayout from './SidebarLayout.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -16,7 +16,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 });
 ---
 
-<BaseLayout title={title} description={description}>
+<SidebarLayout title={title} description={description} currentSlug={post.slug}>
   <article class="prose prose-lg max-w-none">
     <!-- Post Header -->
     <header class="mb-8 not-prose">
@@ -65,7 +65,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
       <p class="text-ink-muted">Enable JavaScript to view comments.</p>
     </noscript>
   </section>
-</BaseLayout>
+</SidebarLayout>
 
 <style>
   /* Post content typography enhancements */

@@ -1,13 +1,15 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../styles/transitions.css';
+import Sidebar from '../components/Sidebar.astro';
 
 interface Props {
   title: string;
   description?: string;
+  currentSlug?: string;
 }
 
-const { title, description = 'Learning, thinking, and writing.' } = Astro.props;
+const { title, description = 'Learning, thinking, and writing.', currentSlug } = Astro.props;
 const siteTitle = 'Steady State';
 const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
 ---
@@ -32,7 +34,7 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="article" />
     <meta property="og:site_name" content={siteTitle} />
 
     <!-- Twitter -->
@@ -43,31 +45,16 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
     <ClientRouter />
   </head>
   <body class="min-h-screen bg-cream-100 bg-grid-pattern text-ink">
-    <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-      <header class="mb-12">
-        <nav class="flex items-center justify-between">
-          <a href="/" class="font-serif text-2xl font-semibold text-ink hover:text-coral transition-colors">
-            Steady State
-          </a>
-          <div class="flex items-center gap-6">
-            <a href="/categories/deep-learning" class="text-ink-light hover:text-coral transition-colors">Deep Learning</a>
-            <a href="/categories/engineering" class="text-ink-light hover:text-coral transition-colors">Engineering</a>
-            <a href="/categories/market" class="text-ink-light hover:text-coral transition-colors">Market</a>
-            <a href="/about" class="text-ink-light hover:text-coral transition-colors">About</a>
-            <a href="/rss.xml" class="text-ink-light hover:text-coral transition-colors" title="RSS Feed">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
-              </svg>
-            </a>
-          </div>
-        </nav>
-      </header>
+    <!-- Sidebar -->
+    <Sidebar currentSlug={currentSlug} />
 
-      <main>
+    <!-- Main Content -->
+    <div class="main-content" id="main-content" style="view-transition-name: post-content">
+      <main class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
         <slot />
       </main>
 
-      <footer class="mt-16 border-t border-cream-300 pt-8 text-center text-sm text-ink-muted">
+      <footer class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 mt-16 border-t border-cream-300 pt-8 text-center text-sm text-ink-muted">
         <p>&copy; {new Date().getFullYear()} Sean Zhang. All rights reserved.</p>
         <p class="mt-2">
           <a href="https://twitter.com/seeeeaaaannnnnn" class="hover:text-coral transition-colors">Twitter</a>
@@ -78,6 +65,19 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
         </p>
       </footer>
     </div>
+
+    <script is:inline>
+      (function() {
+        const mainContent = document.getElementById('main-content');
+        if (!mainContent) return;
+
+        // Check localStorage for saved sidebar state on load
+        const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+        if (isCollapsed) {
+          mainContent.classList.add('sidebar-collapsed');
+        }
+      })();
+    </script>
   </body>
 </html>
 
@@ -109,5 +109,29 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
 
   ::-webkit-scrollbar-thumb:hover {
     background: #B8B5AD;
+  }
+</style>
+
+<style>
+  .main-content {
+    margin-left: 280px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+  }
+
+  .main-content.sidebar-collapsed {
+    margin-left: 0;
+  }
+
+  /* Mobile: No sidebar offset */
+  @media (max-width: 1024px) {
+    .main-content {
+      margin-left: 0;
+      padding-bottom: 72px; /* Space for collapsed sidebar peek */
+    }
+
+    .main-content.sidebar-collapsed {
+      padding-bottom: 0;
+    }
   }
 </style>
