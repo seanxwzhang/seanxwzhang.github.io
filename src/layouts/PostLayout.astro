@@ -1,0 +1,133 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, date, tags, description } = post.data;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="prose prose-lg max-w-none">
+    <!-- Post Header -->
+    <header class="mb-8 not-prose">
+      <h1 class="font-serif text-4xl font-semibold text-ink mb-4">
+        {title}
+      </h1>
+      <div class="flex flex-wrap items-center gap-4 text-sm text-ink-muted">
+        <time datetime={date.toISOString()}>
+          {formattedDate}
+        </time>
+        {tags && tags.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {tags.map((tag: string) => (
+              <a
+                href={`/tags/${tag}`}
+                class="rounded-full bg-cream-200 px-3 py-1 text-xs font-medium text-ink-light hover:bg-coral hover:text-white transition-colors"
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <!-- Post Content -->
+    <div class="post-content">
+      <slot />
+    </div>
+  </article>
+
+  <!-- Comments Section -->
+  <section class="mt-16 pt-8 border-t border-cream-300">
+    <h2 class="font-serif text-2xl font-semibold text-ink mb-6">Comments</h2>
+    <div id="utterances-container">
+      <script
+        src="https://utteranc.es/client.js"
+        repo="seanxwzhang/seanxwzhang.github.io"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async
+      ></script>
+    </div>
+    <noscript>
+      <p class="text-ink-muted">Enable JavaScript to view comments.</p>
+    </noscript>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Post content typography enhancements */
+  .post-content :global(h2) {
+    @apply font-serif text-2xl font-semibold text-ink mt-10 mb-4;
+  }
+
+  .post-content :global(h3) {
+    @apply font-serif text-xl font-semibold text-ink mt-8 mb-3;
+  }
+
+  .post-content :global(p) {
+    @apply text-ink leading-relaxed mb-4;
+  }
+
+  .post-content :global(a) {
+    @apply text-coral underline decoration-coral/30 hover:decoration-coral transition-colors;
+  }
+
+  .post-content :global(blockquote) {
+    @apply border-l-4 border-coral pl-4 italic text-ink-light my-6;
+  }
+
+  .post-content :global(code:not(pre code)) {
+    @apply bg-cream-200 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .post-content :global(pre) {
+    @apply bg-cream-200 rounded-lg p-4 overflow-x-auto my-6;
+  }
+
+  .post-content :global(pre code) {
+    @apply bg-transparent p-0 text-sm;
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    @apply my-4 pl-6;
+  }
+
+  .post-content :global(li) {
+    @apply mb-2;
+  }
+
+  .post-content :global(img) {
+    @apply rounded-lg shadow-sm my-6;
+  }
+
+  .post-content :global(hr) {
+    @apply border-cream-300 my-8;
+  }
+
+  .post-content :global(table) {
+    @apply w-full my-6 border-collapse;
+  }
+
+  .post-content :global(th),
+  .post-content :global(td) {
+    @apply border border-cream-300 px-4 py-2 text-left;
+  }
+
+  .post-content :global(th) {
+    @apply bg-cream-200 font-semibold;
+  }
+</style>

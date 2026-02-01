@@ -1,0 +1,366 @@
+---
+title: "State Space Models lack sequence-crossing"
+date: 2024-03-02
+description: "My opinions on SSMs"
+tags: [Review, SSM, Mamba]
+category: deep-learning
+slug: ssm_review
+---
+
+_ind_
+
+
+## Opinion
+
+
+Every architecture contains some implicit trade-offs. My impression is SSMs are a good sequential architecture for modalities where interactions within a sequence matters less than a good compression of past states. However, it might not be the best architecture if the following 2 conditions are met:
+
+1. The marginal gain of additional compression quality outweighs the efficiency loss.
+2. _The way a task depends on past history_ _varies a lot_ _(the definition of “a lot” will become clearer later)._
+
+The 1st condition is fairly self-explanatory and is generally true for complicated deep learning tasks (chatbot, self-driving), at least for the time being, and especially true for areas that are yet to be solved. 
+
+
+![An illustration of quality-efficiency trade-off](/images/posts/ssm_review-0.png)
+
+
+The 2nd condition is more subtle, because what does “the way a task depends on past history” actually mean? Before attempting to answer this question, here’s why I think it matters for SSM models. 
+
+
+But even before that, let’s do a quick recap of state space models are.
+
+
+## SSM Models
+
+
+When I refer to SSM models, I’m not referring to the classical [state space models](https://probml.github.io/ssm-book/root.html) used in a control context or a quantitative finance context, but rather SSM in the context of sequential neural networks. 
+
+
+![Literature roadmap of recent State Space neural network Model architectures](https://prod-files-secure.s3.us-west-2.amazonaws.com/15aa9ffc-40dc-4d41-b533-55d2569f94bf/47796686-a3be-4013-921d-f71034f78c95/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB4665MVYTXGQ%2F20260114%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260114T195044Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEFoaCXVzLXdlc3QtMiJIMEYCIQCVs2LfyhQ9IUjWs8S7LX%2BK5cJ%2FdBdj60wJrKgeh5F5gQIhAPxsyP5bOkEM8hqUx7%2FutSFY%2FiEtD6wfIr1pIA1K1i7%2FKv8DCCMQABoMNjM3NDIzMTgzODA1Igw%2BcmQ3T4BDKEDNvrwq3APjxz4TdjQo6iot17eAHeved8A%2BkCyWXI%2F6Di4fHzCv6323Bk6jc49lavhvbeW0dA5mEQnmL%2F2uP7%2BoqFXV96blsVOiAs%2BL%2Bj%2Fe7aj5A4Wr%2BNKOXGBYpZ5b7%2Bfdrxgo1ouN9RevNb5J35TX5WkErI%2FWeRCOToLy%2FUICS%2BGXxl7mTijSUP4ZLlJV%2FicFQeiLI6%2BTB0iTneDwuh4ak1hSHVag1DRonCJ3z9wS9OYnYYiMLn70X%2F56G8THui3Pn1dewGCNUv0%2BDSv1c1sdo8MgC3WAxLpypiAs2Ta%2BkLAfDo68XxVaEKJDM9qViGMK55d%2BBI6WQcOPmRIyU6uW%2BHJoDf2173ohwJpunZ4MzJrerb46Vpr5H4VjWs86GPFoRS%2BASveCrGVPWlyYvHeldYfK5P6la2LiVITMdVqbDlfVYxYovpkSbrzEQxyoYirleKP9bAQYoIEWxJKX7l5J8IFsI1vM4NgmShjeDLEwct7Y6CkQXi2lCINOgwXLad8wWprc0xAkLIfykC%2FPEpWGJMisR9iNVqyAagAY02UsGJepeYlaWRV6SWjbnYcA7T16qAdKRVsFkMsZ4quJ54xDnCYWuzmX8NuNtK2hDIalJxD0%2F%2Bz9H3xnLk20PWcfm3s8yDCFrZ%2FLBjqkARA2yXddwVtVPeKvO4q22LZ1hkBIdJVQ1ojNXKBMqTZkbs8gkOOhyGASdvqjwSdm7W4VIHRCGDoy8nJjVzMOsKVzFgbu25gQkj%2BX4lAk3OrNR09PCBGVZZpSefR7xeahaG9wL6zOJkXwyjqrsZ1YGbgUMRI%2Bl5D1FKiQqcR5VYPe1OUwPiZVY1q%2BXLlP2p1qWPsczVZoPvC7gz%2BlNCWnmBVkcQPe&X-Amz-Signature=92008debfe43733b516e42ee9baf2fd11d2e7d7f71c5b8de20d8667179aece2f&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject)
+
+
+The above is literature roadmap of recent SSM architectures. The are some terrific detailed explanation on what they are:
+
+- [The Annotated S4](https://srush.github.io/annotated-s4/) dives deep into S4 and explained the inner workings of S4.
+- [A Visual Guide to Mamba and State Space Models](https://maartengrootendorst.substack.com/p/a-visual-guide-to-mamba-and-state#%C2%A7what-problem-does-it-attempt-to-solve) explained, visually, what mamba does.
+- [From Deep to Long Learning?](https://hazyresearch.stanford.edu/blog/2023-03-27-long-learning) where the authors themselves gave a good account of the development of H3 and Hyena.
+
+In short, SSM is the following process that models state changes of a system
+
+
+$$
+\begin{aligned}
+\color{red}h_{t+1} &= {\color{blue}A}\cdot {\color{red}{h_t}} + {\color{green}{B\cdot x_t}}\\
+y_t &= C\cdot {\color{red}{h_t}} + D\cdot x_t \\
+\text{where } &t := \text{Step/Time}\\
+&h := \text{Hidden state of the system} \\
+&x := \text{Input to the system}\\
+&y := \text{Output of the system} \\
+&A := \text{A matrix determining how the state changes over }t \\
+&B := \text{How input affects state} \\
+&C := \text{How state affects output} \\
+&D := \text{How input directly affects output}
+\end{aligned}
+$$
+
+
+_(The above is only for discrete problem, similar formulation for continuous time; Also I’m neglecting the discretization step here for illustration purpose)_
+
+
+There’re many properties to this model, and its usefulness is immense in the field of control, signal processing, time series application, etc. 
+
+
+### History preserving
+
+
+Just by laying out the equations above does not guarantee a good compression of past history. The magic of SSMs comes from the theory of approximation theory, and in particular, orthogonal polynomials.
+
+
+Consider a scale value $x$ that varies with sequence $x$, i.e.,
+
+
+$$
+f = f(x)
+$$
+
+
+Suppose we want to approximate the history with a limited number of numbers $c_1, c_2, ... c_N$, one way to achieve it is to let each $c_n$ correspond to a “basis function” $\phi_n$ and let
+
+
+$$
+\hat f(x) = \sum_{n=0}^N c_n\phi_n(x)
+$$
+
+
+The approximation error is therefore defined as
+
+
+$$
+\begin{aligned}
+\text{Error} &= ||f(x) - \hat f(x)||^2_w = \int_0^\infty(f(x) - \hat f(x))^2w(x)dx\\
+\text{where } w & \text{ defines a weighting function}
+\end{aligned}
+$$
+
+
+The weighting function is added to further generalize the discussion. Expanding the error, one obtains
+
+
+$$
+\begin{aligned}
+\mathcal{L} &= \int_0^\infty(f(x) - \sum_{n=0}^Nc_n\phi_n(x))^2w(x)dx \\
+&=\int_0^\infty\left[f^2(x) + \sum_{i=0}^Nc_i^2\phi_i^2(x) - 2\sum_{i\neq j}c_ic_j\phi_i(x)\phi_j(x) - 2\sum_{i=0}^Nc_i\phi_i(x)f(x)\right]w(x)dx 
+\end{aligned}
+$$
+
+
+In practice, we don’t have to limit ourselves to integrating from $0$ to $\infty$. This motivates defining the inner product in the function space
+
+
+$$
+\langle f, g\rangle_w := \int_a^b f(x)g(x)w(x)dx
+$$
+
+
+The approximation error can be further rewritten as
+
+
+$$
+\mathcal{L} = \langle f, f\rangle + \sum_{i}^N c_i^2\langle\phi_i, \phi_i\rangle + \sum_{i \neq j} c_ic_j\langle \phi_i, \phi_j \rangle - 2\sum_{i}^Nc_i\langle \phi_i, f\rangle
+$$
+
+
+Now, wouldn’t it be nice if we can eliminate some of the terms here? In fact, we can do exactly that with orthogonal polynomials$^2$. 
+
+
+### Orthogonal Polynomials
+
+
+Orthogonal polynomials have the property that they are orthogonal to each other under the inner product definition, i.e.,
+
+
+$$
+\langle \phi_i, \phi_j \rangle = 0, \forall i \neq j
+
+$$
+
+
+One example would be the Legendre polynomials, which is defined over $t \in [-1, 1]$ with $w(t) = 1$, and is of the following forms
+
+
+$$
+\begin{aligned}
+\phi_0(x) &= 1\\
+\phi_1(x) &= x\\
+\phi_2(x) &= \frac{1}{2}(3x^2 - 1)\\
+\phi_3(x) &= \frac12(5x^3 - 3x) \\
+...\\
+\phi_n(x) &= \frac{1}{2^nn!}\frac{d^n}{dx^n}(x^2-1)^n
+\end{aligned}
+$$
+
+
+_(note: there’s one unique set of OPs for any weight function for any given interval)_
+
+
+With this property, the approximation error simplifies to (the 3rd term disappears)
+
+
+$$
+\mathcal{L} = \langle f, f\rangle + \sum_{i}^N c_i^2\langle\phi_i, \phi_i\rangle - 2\sum_{i}^Nc_i\langle \phi_i, f\rangle
+$$
+
+
+To simplify it further, let’s define the constant in a meaningful way by taking the gradient of $\mathcal{L}$ with respect to $c_i$ and set it to 0
+
+
+$$
+\begin{aligned}
+\nabla_{c_i}\mathcal{L} &= 2c_i\langle\phi_i, \phi_i\rangle - 2\langle\phi_i, f\rangle = 0 \\
+\rightarrow c_i &=\frac{\langle\phi_i, \phi_i\rangle}{\langle\phi_i, f\rangle}
+\end{aligned}
+$$
+
+
+The above gives us a way to **combine a set of orthogonal polynomials to achieve minimum approximation error with respect to any function** $f$**.** 
+
+
+### Make the weight time-dependent
+
+
+Now, what if the weighting function is also time dependent (changes over time)? Instead of $w(x)$, we have $w^{(t)}(x)$. This leads to a more complicated system where everything should be defined with respect to another time. To save you some time, this leads to the following equation for the “minimization coefficient”
+
+
+$$
+c_n(t) = \zeta(t)^{-\frac{1}{2}}\lambda_n \int fp_n^{(t)}\frac{w^{(t)}}{\mathcal{\chi}^{(t)}}
+$$
+
+
+where $p_n^{(t)}$ is the basis OP used in the system, $\chi^{(t)}(x) $ is a scaling function to increase the generality of the argument, and $\zeta(t)$ is a normalization term caused by $\chi^{(t)}$, $w^{(t)}$ is the time-varying weighting function.
+
+
+The difference between $t$ and $x$ is plotted below.
+
+
+![Untitled.png](/images/posts/ssm_review-1.png)
+
+
+Now, why on earth would we want to do this? We want to do this because we want to take the derivative of $c_n(t)$ with respect to $t$, and hopefully derive a SSM out of it. We can do exactly that
+
+
+$$
+\begin{aligned}\frac{d}{d t} c_n(t)= & \zeta(t)^{-\frac{1}{2}} \lambda_n \int f(x)\left(\frac{\partial}{\partial t} p_n(t, x)\right) \frac{\omega}{\chi}(t, x) \mathrm{d} x \\& +\int f(x)\left(\zeta^{-\frac{1}{2}} \lambda_n p_n(t, x)\right)\left(\frac{\partial}{\partial t} \frac{\omega}{\chi}(t, x)\right) \mathrm{d} x .\end{aligned}
+$$
+
+
+The beauty here is that $\frac{\partial}{\partial t} p_n(t, x)$ and $\frac{\partial}{\partial t} \frac{\omega}{\chi}(t, x)$ can both be expressed in close-form and related back to themselves, which means we get an ODE out of this!
+
+
+Once an ODE is obtained, we can structure it to form an SSM. **Note that the precise form of SSM depends on what weighting function/OP we use**. Different choice of weighting function represents how we weight the history.
+
+
+Here’s an example of the explicit form of SSM, for the Laguerre polynomials
+
+
+
+$$
+\begin{aligned}\frac{d}{d t} c(t) & =-A c(t)+B f(t) \\A & =\left[\begin{array}{cccc}\frac{1+\beta}{2} & 0 & \ldots & 0 \\1 & \frac{1+\beta}{2} & \ldots & 0 \\\vdots & & \ddots & \\1 & 1 & \ldots & \frac{1+\beta}{2}\end{array}\right] \\B & =\zeta^{-\frac{1}{2}} \cdot\left[\begin{array}{c}\left(\begin{array}{c}\alpha \\0\end{array}\right) \\\vdots \\\left(\begin{array}{c}N-1+\alpha \\N-1\end{array}\right)\end{array}\right]\end{aligned}
+$$
+
+
+### Problem?
+
+
+After defining the SSM in the continuous domain, one needs to discretize it and turn it into actual architecture and code. However, here I want to focus on 2 properties of SSM:
+
+
+> 💡 1.  The way that $\color{red}{h_t}$ evolves by itself is **time invariant**  
+> 2.  The way $\color{brown}x_t$ affects $\color{red}h_t$ is **additive**
+
+
+_(here I’m abusing notations by using_ $h_t $ _and_ $c(t)$ _interchangeably, and using_  $x(t)$ _for_ $f(t)$_)_
+
+
+To elaborate a bit, it means
+
+1. Without external input, this is a deterministic **linear** system (by design), and it’s much computationally easier to compute a linear system (i.e., convolution can be applied)
+2. The expressiveness of the system is bound by **linearity**
+
+ 
+
+
+To see why the 2nd point is true, we can expand the system equation and obtain
+
+
+$$
+\begin{aligned}
+h_{t+1} &= A h_{t} + Bx_{t} \\
+&= A^2h_{t-1} + ABx_{t-1} + Bx_{t} \\
+&= A^th_1 + A^{t-1}Bx_1 + A^{t-2}Bx_2 + ... + Bx_t
+\\
+y_{t} &= CA^th_1 + CA^{t-1}Bx_1 + CA^{t-2}Bx_2 + ... + CBx_t + Dx_t
+\end{aligned}
+$$
+
+
+where it’s clear $x_{1:t}$ can only affect the system state $h$ in linear fashion, if $A$ and $B$ are fixed. Also, if $C$ and $D$ are fixed, $y_t$ is also affected by $x_{1:t}$ in a linear fashion. 
+
+
+### Lack of non-linearity
+
+
+It’s clear that such a system, while might be desirable for system control, is not ideal to express a complicated system that is **non-linear**. And it’s hard to argue that tasks like language modeling will be a linear system. In the most recent architectures (such as Mamba$^2$), this lack of expressiveness is addressed by 
+
+1. replacing $B$ with $B(x_t)$
+2. replacing $C$ with $C(x_t)$
+3. replacing $D$ with $D(x_t)$
+
+Therefore, the governing equation is replaced by
+
+
+$$
+\begin{aligned}
+\color{red}h_{t+1} &= {\color{blue}A}\cdot {\color{red}{h_t}} + {\color{green}{B(x_t)\cdot x_t}} \\
+y_t &= C(x_t)\cdot {\color{red}{h_t}} + D(x_t)\cdot x_t\\
+\end{aligned}
+$$
+
+
+where we can fold the input $x_t$ further into $B(x_t)$ and $D(x_t)$ without loss of generality, and obtain
+
+
+$$
+\begin{aligned}
+\color{red}h_{t+1} &= {\color{blue}A}\cdot {\color{red}{h_t}} + {\color{green}{B(x_t)}} \\
+y_t &= C(x_t)\cdot {\color{red}{h_t}} + D(x_t)\\
+\end{aligned}
+$$
+
+
+Similarly, we can expand the system again and obtain
+
+
+$$
+\begin{aligned}
+h_{t+1} &= A^th_1 + A^{t-1}B(x_1) + A^{t-2}B(x_2) + ... + B(x_t)
+\\
+y_{t} &= C(x_t)A^{t-1}h_1 + C(x_t)A^{t-1}B(x_2) + C(x_t)A^{t-2}B(x_3) + ... + C(x_t)B(x_t) + D(x_t)
+\end{aligned}
+$$
+
+
+Although this is technically a non-linear system as long as $B(x)$ or $C(x)$ or $D(x) $ is non-linear (for example, $B(x) = \sin(x)$), **this modeling does not involve any sequence-crossing terms** like $B(x_1)\cdot B(x_2)$. 
+
+
+This, in my opinion, hugely impacts the expressiveness of the system because the lack of sequence-cross in sequential modeling is similar to the lack of feature-crossing in tabular modeling, which will result in low sample efficiency.
+
+
+### Mamba to the rescue?
+
+
+In the Mamba$^1$ paper, the authors (I’d argue partially) addressed this issue by:
+
+1. inserting a **convolution layer** before $x$, but I don’t see how that will fundamentally change the picture, because $x_i$ and $x_j$ will not interact with each other if their sequential distance is larger than the convolution kernel size.
+2. having **more layers** so $x_i$ and $x_j$ can interact with each other at a higher layer, but this does not change the fact that on a given layer, no cross-sequence interaction can happen.
+3. creating a gating layer so that **an explicit sequence-crossing layer** is added to the output $y_t$, i.e.,
+
+    $$
+    \begin{aligned}
+    \text{Instead of }\quad y_t &= C(x_t)h_t + D(x_t) \\
+    \text{Let}\quad y_t&=\sigma(x_{1:t})*(C(x_t)h_t + D(x_t))
+    \end{aligned}
+    $$
+
+
+    which technically makes sequence-crossing possible. This is similar to GRU and LSTM. The additional expressiveness of such a gating mechanism, one can argue, is much less that attention, because the gate itself does not contain sequence-crossing terms.
+
+
+## Intuition
+
+
+By turning the linear SSM into an non-linear SSM, and adding these 3 additional modifications, SSM seem to perform well across many modalities (arguments can be made on the details of some of these experiment results, such as the extremely low vocab size used in the induction head$^3$ task). 
+
+
+However, a pattern has emerged through the evolution of SSM models where we started off with a beautiful mathematical model (a unified compression scheme) that has theoretical guarantees on approximation error and implementation efficiency. However, due to our limited understanding of the expressiveness required for complicated domains like language, an iterative approach must be taken to move the trad-off point (illustrated below) towards one that **uses the minimum complexity to achieve the required expressiveness and completeness**.
+
+
+The question then becomes “is transformer already at the best trade-off point”? For most domains?
+
+
+I have no idea.
+
+
+![Untitled.png](/images/posts/ssm_review-2.png)
+
+
+## References
+
+
+[1] Gu, A., & Dao, T. (2023). _Mamba: Linear-Time Sequence Modeling with Selective State Spaces_ (arXiv:2312.00752)
+
+
+[2] Chihara, T. S. (2011). _An introduction to orthogonal polynomials_. Courier Corporation.
+
+
+[3] Olsson, Catherine, et al. "In-context learning and induction heads." _arXiv preprint arXiv:2209.11895_ (2022). 
+

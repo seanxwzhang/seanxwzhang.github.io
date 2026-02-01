@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+// Group posts by year
+const postsByYear = sortedPosts.reduce((acc, post) => {
+  const year = post.data.date.getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof sortedPosts>);
+
+const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+---
+
+<BaseLayout title="Blog" description="All blog posts">
+  <h1 class="font-serif text-4xl font-semibold text-ink mb-8">Blog</h1>
+
+  <div class="space-y-12">
+    {years.map((year) => (
+      <section>
+        <h2 class="font-mono text-lg text-ink-muted mb-6">{year}</h2>
+        <div class="space-y-4">
+          {postsByYear[Number(year)].map((post) => {
+            const formattedDate = new Date(post.data.date).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+            });
+            return (
+              <article class="group">
+                <a href={`/blog/${post.slug}`} class="flex items-baseline gap-4">
+                  <time datetime={post.data.date.toISOString()} class="font-mono text-sm text-ink-muted w-16 shrink-0">
+                    {formattedDate}
+                  </time>
+                  <h3 class="font-medium text-ink group-hover:text-coral transition-colors">
+                    {post.data.title}
+                  </h3>
+                </a>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

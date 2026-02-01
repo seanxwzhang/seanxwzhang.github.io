@@ -1,0 +1,109 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Learning, thinking, and writing.' } = Astro.props;
+const siteTitle = 'Rabbit Holes';
+const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Sean Zhang" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteTitle} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@seeeeaaaannnnnn" />
+
+    <title>{fullTitle}</title>
+  </head>
+  <body class="min-h-screen bg-cream-100 bg-grid-pattern text-ink">
+    <div class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <header class="mb-12">
+        <nav class="flex items-center justify-between">
+          <a href="/" class="font-serif text-2xl font-semibold text-ink hover:text-coral transition-colors">
+            Rabbit Holes
+          </a>
+          <div class="flex items-center gap-6">
+            <a href="/categories/deep-learning" class="text-ink-light hover:text-coral transition-colors">Deep Learning</a>
+            <a href="/categories/engineering" class="text-ink-light hover:text-coral transition-colors">Engineering</a>
+            <a href="/categories/market" class="text-ink-light hover:text-coral transition-colors">Market</a>
+            <a href="/about" class="text-ink-light hover:text-coral transition-colors">About</a>
+            <a href="/rss.xml" class="text-ink-light hover:text-coral transition-colors" title="RSS Feed">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+              </svg>
+            </a>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <slot />
+      </main>
+
+      <footer class="mt-16 border-t border-cream-300 pt-8 text-center text-sm text-ink-muted">
+        <p>&copy; {new Date().getFullYear()} Sean Zhang. All rights reserved.</p>
+        <p class="mt-2">
+          <a href="https://twitter.com/seeeeaaaannnnnn" class="hover:text-coral transition-colors">Twitter</a>
+          {' '}&middot;{' '}
+          <a href="https://github.com/seanxwzhang" class="hover:text-coral transition-colors">GitHub</a>
+          {' '}&middot;{' '}
+          <a href="mailto:sz@seanzhang.me" class="hover:text-coral transition-colors">Email</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style is:global>
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: rgba(224, 122, 95, 0.2);
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #D4D1C9;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B8B5AD;
+  }
+</style>

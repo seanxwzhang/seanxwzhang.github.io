@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+
+const categories = [
+  { slug: 'deep-learning', name: 'Deep Learning', description: 'Machine learning, neural networks, and AI research' },
+  { slug: 'engineering', name: 'Engineering', description: 'Systems, infrastructure, and software development' },
+  { slug: 'market', name: 'Market', description: 'Finance, trading, and market analysis' },
+];
+
+// Count posts per category
+const categoryCounts = categories.map(cat => ({
+  ...cat,
+  count: posts.filter(p => p.data.category === cat.slug).length,
+}));
+---
+
+<BaseLayout title="Categories" description="Browse posts by category">
+  <h1 class="font-serif text-4xl font-semibold text-ink mb-8">Categories</h1>
+
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {categoryCounts.map((cat) => (
+      <a
+        href={`/categories/${cat.slug}`}
+        class="group block rounded-xl bg-white p-6 shadow-sm border border-cream-200 hover:shadow-md hover:border-coral/30 transition-all"
+      >
+        <h2 class="font-serif text-xl font-medium text-ink group-hover:text-coral transition-colors mb-2">
+          {cat.name}
+        </h2>
+        <p class="text-sm text-ink-muted mb-4">
+          {cat.description}
+        </p>
+        <span class="inline-block rounded-full bg-cream-200 px-3 py-1 text-xs font-medium text-ink-light">
+          {cat.count} {cat.count === 1 ? 'post' : 'posts'}
+        </span>
+      </a>
+    ))}
+  </div>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="About Sean Zhang">
+  <article class="prose prose-lg max-w-none">
+    <h1 class="font-serif text-4xl font-semibold text-ink mb-8">About</h1>
+
+    <div class="rounded-xl bg-white p-8 shadow-sm border border-cream-200">
+      <p class="text-ink leading-relaxed mb-4">
+        Hi, I'm <strong>Sean Zhang</strong>. Welcome to Rabbit Holes, my personal blog where I write about
+        machine learning, system engineering, and whatever interesting topics I stumble upon.
+      </p>
+
+      <p class="text-ink leading-relaxed mb-4">
+        I believe in learning in public and sharing the journey, not just the destination.
+        These posts are a mix of tutorials, deep dives, and notes-to-self that I hope
+        others might find useful too.
+      </p>
+
+      <h2 class="font-serif text-2xl font-semibold text-ink mt-8 mb-4">Get in Touch</h2>
+
+      <ul class="space-y-2">
+        <li>
+          <span class="text-ink-muted">Email:</span>{' '}
+          <a href="mailto:sz@seanzhang.me" class="text-coral hover:underline">sz@seanzhang.me</a>
+        </li>
+        <li>
+          <span class="text-ink-muted">Twitter:</span>{' '}
+          <a href="https://twitter.com/seeeeaaaannnnnn" class="text-coral hover:underline">@seeeeaaaannnnnn</a>
+        </li>
+        <li>
+          <span class="text-ink-muted">GitHub:</span>{' '}
+          <a href="https://github.com/seanxwzhang" class="text-coral hover:underline">seanxwzhang</a>
+        </li>
+      </ul>
+
+      <h2 class="font-serif text-2xl font-semibold text-ink mt-8 mb-4">Subscribe</h2>
+
+      <p class="text-ink leading-relaxed">
+        You can subscribe to new posts via{' '}
+        <a href="/rss.xml" class="text-coral hover:underline">RSS</a> or follow me on
+        Twitter for updates.
+      </p>
+    </div>
+  </article>
+</BaseLayout>
