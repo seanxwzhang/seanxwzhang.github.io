@@ -1,24 +1,148 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PostCard from '../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('posts', ({ data }) => !data.draft);
 const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const renderedPosts = await Promise.all(
+  sortedPosts.map(async (post) => {
+    const { Content } = await post.render();
+    return { post, Content };
+  })
+);
+
+const categoryNames: Record<string, string> = {
+  'deep-learning': 'Deep Learning',
+  'engineering': 'Engineering',
+  'market': 'Market',
+  'rambling': 'Rambling',
+};
 ---
 
 <BaseLayout title="Steady State">
   <section>
-    <div class="space-y-6">
-      {sortedPosts.map((post) => (
-        <PostCard
-          title={post.data.title}
-          slug={post.slug}
-          date={post.data.date}
-          description={post.data.description}
-          tags={post.data.tags}
-        />
-      ))}
-    </div>
+    {renderedPosts.map(({ post, Content }, i) => {
+      const formattedDate = post.data.date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      return (
+        <article>
+          <header class="mb-4">
+            <a href={`/blog/${post.slug}`} class="group">
+              <h2 class="font-serif text-3xl font-semibold text-ink group-hover:text-coral transition-colors">
+                {post.data.title}
+              </h2>
+            </a>
+            <div class="flex items-center gap-3 mt-2 text-sm text-ink-muted">
+              <time datetime={post.data.date.toISOString()}>
+                {formattedDate}
+              </time>
+              <span>&middot;</span>
+              <a href={`/categories/${post.data.category}`} class="hover:text-coral transition-colors">
+                {categoryNames[post.data.category] ?? post.data.category}
+              </a>
+            </div>
+          </header>
+
+          <div class="excerpt-container">
+            <div class="excerpt-content post-content prose max-w-none">
+              <Content />
+            </div>
+            <div class="excerpt-fade"></div>
+          </div>
+
+          <a href={`/blog/${post.slug}`} class="inline-block mt-3 text-sm text-coral hover:text-coral-dark transition-colors font-medium">
+            Continue reading &rarr;
+          </a>
+
+          {i < renderedPosts.length - 1 && (
+            <hr class="my-10 border-cream-300" />
+          )}
+        </article>
+      );
+    })}
   </section>
 </BaseLayout>
+
+<style>
+  .excerpt-container {
+    position: relative;
+    max-height: 20em;
+    overflow: hidden;
+  }
+
+  .excerpt-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6em;
+    background: linear-gradient(to bottom, transparent, theme('colors.cream.100'));
+    pointer-events: none;
+  }
+
+  .post-content :global(h1) {
+    @apply font-serif text-xl font-semibold text-ink mt-6 mb-3;
+  }
+
+  .post-content :global(h2) {
+    @apply font-serif text-lg font-semibold text-ink mt-6 mb-3;
+  }
+
+  .post-content :global(h3) {
+    @apply font-serif text-base font-semibold text-ink mt-5 mb-2;
+  }
+
+  .post-content :global(p) {
+    @apply text-ink leading-relaxed mb-4;
+  }
+
+  .post-content :global(a) {
+    @apply text-coral underline decoration-coral/30 hover:decoration-coral transition-colors;
+  }
+
+  .post-content :global(blockquote) {
+    @apply border-l-4 border-coral pl-4 italic text-ink-light my-4;
+  }
+
+  .post-content :global(code:not(pre code)) {
+    @apply bg-cream-200 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+
+  .post-content :global(pre) {
+    @apply bg-cream-200 rounded-lg p-4 overflow-x-auto my-4;
+  }
+
+  .post-content :global(pre code) {
+    @apply bg-transparent p-0 text-sm;
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    @apply my-3 pl-6;
+  }
+
+  .post-content :global(li) {
+    @apply mb-1;
+  }
+
+  .post-content :global(img) {
+    @apply rounded-lg shadow-sm my-4;
+  }
+
+  .post-content :global(table) {
+    @apply w-full my-4 border-collapse;
+  }
+
+  .post-content :global(th),
+  .post-content :global(td) {
+    @apply border border-cream-300 px-4 py-2 text-left;
+  }
+
+  .post-content :global(th) {
+    @apply bg-cream-200 font-semibold;
+  }
+</style>

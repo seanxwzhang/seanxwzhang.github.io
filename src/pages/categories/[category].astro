@@ -6,6 +6,7 @@ const CATEGORIES = {
   'deep-learning': { name: 'Deep Learning', description: 'Machine learning, neural networks, and AI research' },
   'engineering': { name: 'Engineering', description: 'Systems, infrastructure, and software development' },
   'market': { name: 'Market', description: 'Finance, trading, and market analysis' },
+  'rambling': { name: 'Rambling', description: 'Loosely structured thoughts and musings' },
 } as const;
 
 export function getStaticPaths() {
@@ -13,6 +14,7 @@ export function getStaticPaths() {
     { params: { category: 'deep-learning' } },
     { params: { category: 'engineering' } },
     { params: { category: 'market' } },
+    { params: { category: 'rambling' } },
   ];
 }
 
