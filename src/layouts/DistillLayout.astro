@@ -147,19 +147,25 @@ const categories = [
     </div>
 
     <script is:inline>
-      (function() {
+      function initMenuToggle() {
         const toggle = document.getElementById('menu-toggle');
         const close = document.getElementById('menu-close');
         const overlay = document.getElementById('menu-overlay');
 
         if (!toggle || !close || !overlay) return;
 
-        toggle.addEventListener('click', () => {
+        // Remove any existing listeners by cloning
+        const newToggle = toggle.cloneNode(true);
+        const newClose = close.cloneNode(true);
+        toggle.parentNode.replaceChild(newToggle, toggle);
+        close.parentNode.replaceChild(newClose, close);
+
+        newToggle.addEventListener('click', () => {
           overlay.classList.add('open');
           document.body.style.overflow = 'hidden';
         });
 
-        close.addEventListener('click', () => {
+        newClose.addEventListener('click', () => {
           overlay.classList.remove('open');
           document.body.style.overflow = '';
         });
@@ -171,13 +177,21 @@ const categories = [
           }
         });
 
-        document.addEventListener('keydown', (e) => {
+        // Use a named function for keydown so we can remove/re-add it
+        function handleEscape(e) {
           if (e.key === 'Escape' && overlay.classList.contains('open')) {
             overlay.classList.remove('open');
             document.body.style.overflow = '';
           }
-        });
-      })();
+        }
+        document.removeEventListener('keydown', handleEscape);
+        document.addEventListener('keydown', handleEscape);
+      }
+
+      // Run on initial load
+      initMenuToggle();
+      // Run after each client-side navigation (Astro view transitions)
+      document.addEventListener('astro:page-load', initMenuToggle);
     </script>
   </body>
 </html>
