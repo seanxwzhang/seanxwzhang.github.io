@@ -1,0 +1,75 @@
+---
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<span class="marginnote-wrapper">
+  <label class="marginnote-toggle" for={`mn-${id}`} aria-label="Toggle margin note">⊕</label>
+  <input type="checkbox" id={`mn-${id}`} class="marginnote-checkbox" />
+  <span class="marginnote">
+    <slot />
+  </span>
+</span>
+
+<style>
+  .marginnote-wrapper {
+    position: relative;
+  }
+
+  .marginnote-checkbox {
+    display: none;
+  }
+
+  .marginnote-toggle {
+    cursor: pointer;
+    color: theme('colors.coral.DEFAULT');
+    font-size: 0.8em;
+    vertical-align: super;
+    font-weight: 500;
+    margin-left: 0.1em;
+  }
+
+  .marginnote {
+    float: right;
+    clear: right;
+    width: var(--margin-width, 220px);
+    margin-right: calc(-1 * var(--margin-width, 220px) - var(--margin-gap, 40px));
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: theme('colors.ink.light');
+    font-style: italic;
+  }
+
+  @media (max-width: 1200px) {
+    .marginnote {
+      display: none;
+      float: none;
+      width: auto;
+      margin-right: 0;
+      margin-top: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: theme('colors.cream.100');
+      border-left: 3px solid theme('colors.coral.light');
+      border-radius: 0 0.375rem 0.375rem 0;
+    }
+
+    .marginnote-checkbox:checked + .marginnote {
+      display: block;
+    }
+
+    .marginnote-toggle {
+      text-decoration: underline;
+      text-decoration-color: theme('colors.coral.light');
+      text-underline-offset: 2px;
+    }
+  }
+
+  @media (min-width: 1201px) {
+    .marginnote-toggle {
+      display: none;
+    }
+  }
+</style>

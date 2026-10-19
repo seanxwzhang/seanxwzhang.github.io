@@ -1,0 +1,84 @@
+---
+interface Props {
+  width?: 'normal' | 'wide' | 'full';
+  caption?: string;
+  alt?: string;
+}
+const { width = 'normal', caption, alt } = Astro.props;
+
+const widthClass = {
+  normal: 'figure-normal',
+  wide: 'figure-wide',
+  full: 'figure-full',
+}[width];
+---
+
+<figure class={`distill-figure ${widthClass}`}>
+  <div class="figure-content">
+    <slot />
+  </div>
+  {caption && (
+    <figcaption class="figure-caption">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .distill-figure {
+    margin: 2rem 0;
+  }
+
+  .figure-content {
+    width: 100%;
+  }
+
+  .figure-content :global(img),
+  .figure-content :global(video),
+  .figure-content :global(iframe) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+  }
+
+  .figure-caption {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: theme('colors.ink.light');
+    line-height: 1.5;
+  }
+
+  .figure-normal {
+    max-width: 100%;
+  }
+
+  .figure-wide {
+    width: calc(100% + var(--margin-width, 220px) + var(--margin-gap, 40px));
+    max-width: calc(100% + var(--margin-width, 220px) + var(--margin-gap, 40px));
+  }
+
+  .figure-full {
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    position: relative;
+  }
+
+  .figure-full .figure-content {
+    padding: 0 1rem;
+  }
+
+  .figure-full .figure-caption {
+    max-width: var(--content-width, 650px);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+  }
+
+  @media (max-width: 1200px) {
+    .figure-wide {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+</style>

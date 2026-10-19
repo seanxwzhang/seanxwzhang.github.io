@@ -1,0 +1,281 @@
+---
+import DistillLayout from './DistillLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+import '../styles/distill.css';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, date, tags, description } = post.data;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<DistillLayout title={title} description={description} currentSlug={post.slug}>
+  <article class="distill-article">
+    <header class="article-header">
+      <h1 class="article-title">
+        {title}
+      </h1>
+      <div class="article-meta">
+        <time datetime={date.toISOString()}>
+          {formattedDate}
+        </time>
+        {tags && tags.length > 0 && (
+          <div class="article-tags">
+            {tags.map((tag: string) => (
+              <a
+                href={`/tags/${tag}`}
+                class="tag"
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="article-content">
+      <slot />
+    </div>
+  </article>
+
+  <section class="comments-section">
+    <h2 class="comments-title">Comments</h2>
+    <div id="utterances-container">
+      <script
+        src="https://utteranc.es/client.js"
+        repo="seanxwzhang/seanxwzhang.github.io"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async
+      ></script>
+    </div>
+    <noscript>
+      <p class="text-ink-muted">Enable JavaScript to view comments.</p>
+    </noscript>
+  </section>
+</DistillLayout>
+
+<style>
+  .distill-article {
+    counter-reset: sidenote-counter;
+  }
+
+  .article-header {
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid theme('colors.cream.300');
+  }
+
+  .article-title {
+    font-family: theme('fontFamily.serif');
+    font-size: 2.25rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: theme('colors.ink.muted');
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    padding: 0.25rem 0.75rem;
+    background: theme('colors.cream.200');
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: theme('colors.ink.light');
+    transition: all 0.2s ease;
+  }
+
+  .tag:hover {
+    background: theme('colors.coral.DEFAULT');
+    color: white;
+  }
+
+  .article-content {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: theme('colors.ink.DEFAULT');
+  }
+
+  .article-content :global(h2) {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .article-content :global(h3) {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-content :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .article-content :global(a) {
+    color: theme('colors.coral.DEFAULT');
+    text-decoration: underline;
+    text-decoration-color: rgba(224, 122, 95, 0.3);
+    text-underline-offset: 2px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .article-content :global(a:hover) {
+    text-decoration-color: theme('colors.coral.DEFAULT');
+  }
+
+  .article-content :global(blockquote) {
+    border-left: 4px solid theme('colors.coral.DEFAULT');
+    padding-left: 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    color: theme('colors.ink.light');
+  }
+
+  .article-content :global(code:not(pre code)) {
+    font-family: theme('fontFamily.mono');
+    background: theme('colors.cream.200');
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+
+  .article-content :global(pre) {
+    background: theme('colors.cream.200');
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  .article-content :global(pre code) {
+    font-family: theme('fontFamily.mono');
+    background: transparent;
+    padding: 0;
+  }
+
+  .article-content :global(ul),
+  .article-content :global(ol) {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .article-content :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
+  .article-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.25rem auto;
+    display: block;
+  }
+
+  .article-content :global(img + em),
+  .article-content :global(p > img + br + em),
+  .article-content :global(p:has(> img) + p > em:only-child) {
+    display: block;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: theme('colors.ink.light');
+    margin-top: -0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .article-content :global(hr) {
+    border: none;
+    border-top: 1px solid theme('colors.cream.300');
+    margin: 2rem 0;
+  }
+
+  .article-content :global(table) {
+    width: 100%;
+    margin: 1rem 0;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .article-content :global(th),
+  .article-content :global(td) {
+    border: 1px solid theme('colors.cream.300');
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  .article-content :global(th) {
+    background: theme('colors.cream.200');
+    font-weight: 600;
+  }
+
+  .article-content :global(strong) {
+    font-weight: 600;
+  }
+
+  .comments-section {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid theme('colors.cream.300');
+    max-width: var(--content-width);
+  }
+
+  .comments-title {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .article-title {
+      font-size: 1.75rem;
+    }
+
+    .article-content {
+      font-size: 1rem;
+    }
+
+    .article-content :global(h2) {
+      font-size: 1.375rem;
+    }
+
+    .article-content :global(h3) {
+      font-size: 1.125rem;
+    }
+  }
+</style>
