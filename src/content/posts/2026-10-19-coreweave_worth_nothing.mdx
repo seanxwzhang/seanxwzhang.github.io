@@ -1,49 +1,60 @@
 ---
-title: "Why your CoreWeave stocks are worth nothing"
+title: "Is CoreWeave Worth Zero?"
 date: 2026-10-19
-description: "A neocloud is a chip-rental business run on borrowed money. Follow one GPU from purchase to retirement, then test the math yourself."
+description: "A neocloud is a chip-rental business run on borrowed money. What CoreWeave's signed contracts are worth, what its share price assumes, and a model to test it yourself."
 tags: [CoreWeave, AI, GPU, Valuation]
 category: market
-draft: true
+draft: false
 slug: coreweave_worth_nothing
 ---
 
 import CoreWeaveModel from '../../components/coreweave/CoreWeaveModel.tsx';
 import Sidenote from '../../components/distill/Sidenote.tsx';
-import Figure from '../../components/distill/Figure.tsx';
 import 'katex/dist/katex.min.css';
+
+<style>{`.katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.25em 0; } .tldr { border: 1px solid #EBE8E2; background: #FAF8F5; border-radius: 12px; padding: 0.25rem 1.25rem; margin: 0 0 2rem; } .tldr ul { margin-top: 0.25rem; } @media (max-width: 640px) { .tldr { padding: 0.25rem 0.875rem; } .tldr ul { padding-left: 1.1rem; } } .tldr > p:first-child { margin-bottom: 0.25rem; font-size: 0.85em; letter-spacing: 0.06em; text-transform: uppercase; color: #4A5568; }`}</style>
+
+<div class="tldr">
+
+**TL;DR**
+
+- CoreWeave borrows money to buy AI chips and rents them out by the hour. The whole question is whether those chips earn back more than the loans cost before they go obsolete.
+- Everything it has already signed is worth about **\$20 a share** once its debts are paid. The stock trades at **\$61**.
+- The rest of the price is a bet that contracts it hasn't signed yet will pay at least **\$3.58 per GPU-hour**, 23% more than Microsoft pays IREN. My base case: about **\$39 a share**.
+- Every number here is an assumption you can change. [Jump straight to the model →](#try-it-yourself)
+
+</div>
 
 On [July 8, 2008](https://www.reuters.com/article/business/energy/transocean-rig-gets-record-650000-dayrate-idUSN08177559/), **Transocean (`NYSE: RIG`)** [disclosed in an SEC filing](https://www.sec.gov/Archives/edgar/data/1083269/000119312508148448/dex991.htm) a deal that stunned Wall Street: oil giant Eni had agreed to rent a single ultra-deepwater drillship, the *Deepwater Pathfinder*, for a record **\$650,000 a day** over five years.
 
-At the time, oil was above \$140 a barrel and the world was desperate for rigs. Transocean’s contract backlog topped \$40 billion, its stock traded near **\$160**, and the math looked bulletproof: borrow hundreds of millions of dollars to build a ship, lock in a supermajor on a five-year take-or-pay contract, and print money.
+At the time, oil was near \$140 a barrel and the world was desperate for rigs. Transocean’s contract backlog [topped \$40 billion](https://www.sec.gov/Archives/edgar/data/0001083269/000108326908000109/form10q.htm), its stock was near an all-time high, and the math looked bulletproof: borrow hundreds of millions of dollars to build a ship, lock in a supermajor on a five-year take-or-pay contract, and print money.
 
-When that five-year contract expired in March 2015, newer-generation drillships had flooded the market. Nobody wanted an older rig. Transocean [parked the *Pathfinder* twelve miles off the coast of Trinidad](https://gcaptain.com/oils-biggest-rigs-get-sent-to-junkyard-as-daily-losses-mount/) with its engines off for two years before [sending it to the scrapyard in September 2017](https://www.sec.gov/Archives/edgar/data/1451505/000145150517000063/c505-20170922x8k.htm). Transocean is still public today—nearly twenty years later, **`RIG` trades at \$5.62, down 96% from its peak.** The five-year contracts were real, the customers paid on time, and the debtholders were made whole—but shareholders got wiped out.
+When that five-year contract expired in April 2015, newer-generation drillships had flooded the market. Nobody wanted an older rig. Transocean [parked the *Pathfinder* twelve miles off the coast of Trinidad](https://gcaptain.com/oils-biggest-rigs-get-sent-to-junkyard-as-daily-losses-mount/) with its engines off for two years before [sending it to the scrapyard in September 2017](https://www.sec.gov/Archives/edgar/data/1451505/000145150517000063/c505-20170922x8k.htm). Transocean is still public today—nearly twenty years later, **`RIG` trades at \$5.62, down 96% from its peak.** The five-year contract was real, Transocean got paid, and the debtholders were made whole—but shareholders got wiped out.
 
-<Figure width="wide" caption="Share prices: Transocean (RIG) peaked in 2008 and fell 96%; AerCap (AER), an aircraft lessor, kept climbing" client:visible>
-  <img src="/images/posts/coreweave/rig_vs_aer.png" alt="Share prices: Transocean (RIG) peaked in 2008 and fell 96%; AerCap (AER), an aircraft lessor, kept climbing" />
-</Figure>
+<figure class="distill-figure figure-wide"><div class="figure-content"><img src="/images/posts/coreweave/rig_vs_aer.png" alt="Share prices: Transocean (RIG) peaked in 2008 and fell 96%; AerCap (AER), an aircraft lessor, kept climbing" /></div><figcaption class="figure-caption">Share prices: Transocean (RIG) peaked in 2008 and fell 96%; AerCap (AER), an aircraft lessor, kept climbing</figcaption></figure>
+
 
 Now you can see the remarkable resemblance between Transocean and neo-cloud companies like **CoreWeave**<Sidenote id="neocloud" client:visible>A "neocloud" is a new breed of cloud provider that specializes in renting out GPU compute for AI workloads, financed almost entirely with debt. The category includes CoreWeave, Lambda Labs, and a growing list of others.</Sidenote>, whose business model can be summarized as:
 
 > You pay $X$ amount of money for a computer chip with borrowed money, then rent the chip out by the hour and hope it earns back more than the loan costs before it becomes worthless.
 
-When your business is using 90% debt to rent out assets, it's going to end in one of two ways. The good way is if the asset has a long useful life and doesn't go obsolete--like a Boeing 737, which flies for 25 years and pays off its loan 3 times over. The bad way is if the assets are rendered obsolete before the debt is even paid off. 
+When your business is about funding more than 90% of your assets with debt, it ends in one of two ways. The good way is if the asset has a long useful life and doesn't go obsolete--like a Boeing 737, which keeps earning long after its loan is paid off. The bad way is if the assets are rendered obsolete before the debt is even paid off.
 
-In the next few sections, we'll try to find out which case CoreWeave belongs to. If the details are too boring, feel free to jump to the end where I assembled an interactive model for you to test your own hypothesis. After all, future is not predictable and we are all here watching history being made live.
+In the next few sections, we'll try to find out which case CoreWeave belongs to. If the details are too boring, feel free to jump to the end where I assembled an interactive model for you to test your own. This is a model, not a forecast: the future is unpredictable, and we are all here watching history being made live.
 
 ## Model
 
-To understand why CoreWeave's stocks can potentially be worth \$0, we need to figure out a couple important variables:
+To see how CoreWeave's stock could be worth zero, we need to figure out a few important variables:
 
 * **Upfront Cost ($X$):** The all-in capital expenditure to buy the chip, networking gear, and plug it into a data center.
 
-* **Hourly Rent ($P$), Contract Length ($T$), and Capacity Utilization ($u$):** How much a customer pay per hour and how long a contract lasts, and to what extent the capacity is being utilized.
+* **Hourly Rent ($P$), Contract Length ($T$), and Capacity Utilization ($u$):** How much a customer pays per hour, how long a contract lasts, and what share of hours actually gets billed.
 
 * **Cash Operating Cost ($c$):** What it costs per hour just to keep the lights on—electricity, data center rent, and maintenance.
 
-* **The "Aging Curve" — Price Decay ($\delta$) & Lifespan ($L$):** Once the first 5-year contract ends, how fast the chip's rental price drops each year ($\delta$) as newer chips arrive, and the maximum economic life ($L$, ~8 years) before it becomes e-waste.
+* **The "Aging Curve" — Price Decay ($\delta$) & Lifespan ($L$):** Once a contract ends, how fast the chip's rental price drops each year  as newer chips arrive, and the maximum economic life before it becomes e-waste.
 
-* **Cost of Debt ($r$):** The interest rate on the borrowed money (~9–10% on marginal secured debt). 
+* **Cost of Debt ($r$):** The interest rate on the borrowed money (e.g., ~9–10% on marginal secured debt).
 
 For a single chip (or megawatt of chips) to create any value at all, the present value of its net rental cash flows over its lifespan must beat its upfront cost:
 
@@ -52,6 +63,8 @@ $$
 \text{NPV} = \underbrace{\sum_{t=1}^{T} \frac{P \cdot u - c}{(1+r)^t}}_{\text{Initial Contract}} + \underbrace{\sum_{t=T+1}^{L} \frac{P(1-\delta)^{t-1} \cdot u - c}{(1+r)^t}}_{\text{Post-Contract Tail (Residual Value)}} - X
 
 $$
+
+For contracts CoreWeave has already signed, $u$ is 100%: they are take-or-pay, so the customer pays for every reserved hour. For capacity it hasn't sold yet, I use 95% to allow for gaps between customers.
 
 And to get what your **stock** is worth, you add up the NPV of all those chips and subtract the massive mountain of debt and customer prepayments (right now it's around $D_{\text{net}} \approx$ \$38.6B) sitting ahead of equity:
 
@@ -63,44 +76,123 @@ $$
 
 ## Data
 
-Every number in the model can be traced to something public: CoreWeave's own filings, contract announcements from it and its competitors, and GPU rental price indices. I won't walk through all of them here (the full list lives in the Data tab), but two examples show how the pieces get pinned down.
+Now let's plug in real numbers. Almost everything here comes straight from SEC filings, competitor deal announcements, and GPU price trackers (if you want every single source link and whether an input is disclosed or my own assumption, it's all in [this spreadsheet](https://docs.google.com/spreadsheets/d/1YrNBFM47EAufZWO7uvdryZzRA-TGk44gpl_EhZjjmYA/edit?usp=sharing)).
 
-**Example 1: what a chip rents for ($P$), and what it costs ($X$).**
+The hardest numbers to pin down are **what a chip actually costs ($X$)**, **what big customers actually pay to rent it ($P$)**, and **how fast it ages out ($\delta$ and $L$)**. Here is how we get them.
 
-CoreWeave doesn't publish its contract prices. But in November 2025 one of its competitors, IREN, announced a five-year, \$9.7 billion deal with Microsoft for roughly 76,000 of Nvidia's GB300 chips. Spread that evenly over every hour of the contract:
+### 1. What does a chip rent for ($P$), and what does it cost ($X$)?
+
+If you go to CoreWeave's website, they list on-demand prices of \$8.60 to \$10.50 an hour for Nvidia's Blackwell chips. Nobody signing a multi-billion-dollar contract pays sticker price.
+
+CoreWeave doesn't disclose what Microsoft or OpenAI actually pay on five-year deals, but its competitor **IREN** spilled the beans. In November 2025, IREN [announced a five-year, \$9.7 billion deal with Microsoft](https://iren.gcs-web.com/news-releases/news-release-details/iren-secures-97bn-ai-cloud-contract-microsoft) for Nvidia GB300 capacity across 200 megawatts of data-center space. Per megawatt, that's:
+
+$$
+\frac{\$9.7\text{B}}{5\ \text{yrs} \times 200\ \text{MW}} \approx \$9.7\text{M per MW per year}
+$$
+
+IREN didn't give an exact chip count in the press release, but its presentation says the deal takes its fleet to about 100,000 GPUs, and analysts put the Microsoft share at [roughly 76,000](https://ziven.io/earnings/calls/iren/q1-fy2026). Spread over every hour of the contract, that comes out to:
 
 $$
 P \approx \frac{\$9.7\text{B}}{5\ \text{yrs} \times 76{,}000\ \text{GPUs} \times 8{,}760\ \text{hrs/yr}} \approx \$2.91\ \text{per GPU-hour}
 $$
 
-That's what a hyperscaler pays when it signs for five years and tens of thousands of chips at once, and it's our anchor for $P$ on CoreWeave's big contracts. The same announcement also gives us $X$: IREN ordered \$5.8 billion of servers and networking gear from Dell for those chips, about \$76,000 per GPU. The model actually uses a lower figure, about \$69,000 all-in, which is generous to CoreWeave.
+While the \$2.91/hr figure relies on that 76,000-GPU estimate, the \$9.7M per megawatt number is hard fact—and [CoreWeave's own Q2 2026 10-Q](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/crwv-20260630.htm) shows it earned almost the exact same rate (~\$9.6M per active megawatt). That's what a hyperscaler pays when it locks in tens of thousands of chips for five years, and it's our starting point for $P$.
 
-**Example 2: how fast old chips lose value ($\delta$ and $L$).**
+The same announcement also gives us $X$: to fulfill Microsoft's order, IREN bought \$5.8 billion of GPUs and related gear from Dell, or about **\$76,000 per GPU** if the 76,000 count is right. In my model, I actually use a lower number—about **\$69,000 all-in**—giving CoreWeave the benefit of the doubt.
 
-The best evidence is the A100, the chip behind the first ChatGPT, launched in 2020. When it was new, CoreWeave's own public price list charged \$2.21 an hour for it. Today, Silicon Data's A100 rental index sits at about \$1.53. Over almost six years, that works out to
+Here is the uncomfortable part: plug CoreWeave's costs into the formula, and a new chip on that contract breaks even at **\$2.91 an hour** if 100% of hours are billed (\$3.06 at 95% utilization). In other words, these hyperscaler deals are priced almost dead-on breakeven. They pay back the chip and the lenders' interest, and leave virtually nothing on the bone.
+
+<figure class="distill-figure figure-wide"><div class="figure-content"><img src="/images/posts/coreweave/example1_pricing_v3.png" alt="Bar chart: what a GPU-hour sells for, by who is buying" /></div></figure>
+
+*Figure 1 — What a Blackwell-class GPU-hour sells for, depending on who's buying. Microsoft's five-year deal with IREN sits at ~\$2.90, right at breakeven. Shorter, smaller deals on the open market go for roughly twice that. To justify CoreWeave's \$61 stock price, future contracts need to clear ~\$3.58.*
+
+But \$2.90 is just one deal, signed in November 2025. CoreWeave's backlog was signed over almost two years, and GPU prices moved a lot in that time: Silicon Data's three-year rate for Blackwell chips went from about \$4 last December to \$5.66 today. Even Microsoft doesn't pay one price. Two months before the IREN deal, it signed a five-year contract with Nebius that works out to roughly \$4 an hour.
+
+CoreWeave won't tell us its average, so let's estimate it. Group its big contracts by when they were signed, start from the market rate that month, and knock off the same one-third discount Microsoft got from IREN:
+
+<figure class="distill-figure figure-wide"><div class="figure-content"><img src="/images/posts/coreweave/mix_mosaic.png" alt="Mosaic chart of CoreWeave's big contracts by signing date: newer contracts pay more, and the average is about 3.37 dollars an hour" /></div></figure>
+
+
+Weighted by how many hours each group sells, the average comes out to about **\$3.37 an hour**: above IREN, below Nebius. That's what I use for the contracts CoreWeave has already signed.
+
+### 2. How fast do old chips become worthless ($\delta$ and $L$)?
+
+To see how a GPU ages in the wild, look at Nvidia's **A100**—the chip that trained the original ChatGPT back in 2020.
+
+When the A100 was new, CoreWeave's public price sheet charged **\$2.21 an hour** for it. Today, on Silicon Data's rental index, an A100 goes for **\$1.53 an hour**. Over nearly six years, that's a price drop of about **6% a year**:
 
 $$
 \delta \approx 1 - \left(\frac{1.53}{2.21}\right)^{1/5.8} \approx 6\%\ \text{per year}
 $$
 
-The H100, two years younger, shows about 5% a year. The model uses 7%, since the old list price left out the CPU and memory that are now bundled into the index.
+The H100 (launched two years later) is dropping at ~5% a year. I use **$\delta = 7\%$** in the model, since CoreWeave's old \$2.21 price left out the CPU and memory that are bundled into today's index price.
 
-Lifespan $L$ comes from the same data, with a twist. Silicon Data also estimates what a used A100 is worth, and that estimate fell 46% in 18 months while the A100's rent barely moved. The chip didn't get cheaper to rent; it just had fewer years left to earn. Silicon Data treats every chip as done eight years after launch (for the A100, May 2028), so that's what we use for $L$.
+What about lifespan ($L$)? Look at the right-hand chart below. Over the past 18 months, Silicon Data's valuation of a used A100 (the present value of the rent it can still earn before retirement) plunged **46%**—from \$8,163 down to \$4,431—even though hourly rent barely budged. Why? Because the clock is running out. Silicon Data models every GPU as hitting zero economic value **8 years after launch** (May 2028 for the A100). So we set **$L = 8\text{ years}$**.
 
-**Everything else**, briefly:
+<figure class="distill-figure figure-wide"><div class="figure-content"><img src="/images/posts/coreweave/example2_aging_lifespan_v2.png" alt="Left: A100 and H100 rent over time. Right: estimated A100 value fell 46% as its remaining life shrank" /></div></figure>
 
-| Variable             | Where it comes from                                                                                                                       |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| $T$, contract length | CoreWeave's annual report: contracts average about five years                                                                             |
-| $u$, utilization     | Assumed 95%; take-or-pay contracts bill close to 100%                                                                                     |
-| $c$, operating cost  | CoreWeave's actual cash costs per megawatt over the past year, excluding stock compensation (about \$3.8M per MW per year)                |
-| $r$, cost of debt    | CoreWeave's latest chip-backed loan, priced at SOFR + 5.5% (about 9.4%), rounded up to 10%                                                |
-| $D_{\text{net}}$     | CoreWeave's June 2026 balance sheet plus debt raised since: \$28.7B of net debt, \$9.7B of customer prepayments, \$0.2B of finance leases |
+*Figure 2 — Left: Older chips lose rental value at ~5–6% a year. Right: Silicon Data's modeled value of a used A100 fell 46% in 18 months even while hourly rent stayed flat at \$1.53/hr, simply because its remaining useful life shrank from 3.0 years to 1.5 years.*
 
-None of these are gospel. Every one of them is a knob you can turn in the model below.
+### 3. The rest of the inputs
+
+Here is everything else in one table, marked as *disclosed* (straight from a filing), *derived* (calculated from disclosed numbers), or *assumed* (my judgment):
+
+<div class="assumptions-table figure-wide" style={{overflowX: "auto", fontSize: "0.85em"}}>
+
+| Input                                           | Value                                                  | Status    | Where it comes from                                                                                                           |
+| ----------------------------------------------- | ------------------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| $P$, signed contracts                           | \$3.37 per GPU-hour                                    | Derived   | [IREN–Microsoft deal](https://iren.gcs-web.com/news-releases/news-release-details/iren-secures-97bn-ai-cloud-contract-microsoft), adjusted for when each contract was signed (above) |
+| $P$, future contracts                           | \$3.30 in my base case; \$3.58 justifies today's price | Assumed   | The single number the stock price hinges on                                                                                   |
+| $X$, upfront cost                               | ≈\$69,000 per GPU (\$26M per MW)                       | Derived   | Chips, servers, networking, and data-center capex ([Q2 2026 10-Q PP&E note](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R11.htm)) |
+| $T$, contract length                            | 5 years                                                | Disclosed | [CoreWeave's FY2025 10-K](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000104/crwv-20251231.htm): committed contracts average ~5 years |
+| $u$, share of hours billed                      | 100% signed, 95% future                                | Assumed   | [Signed deals are take-or-pay](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R8.htm); 95% allows for gaps between customers |
+| $c$, operating cost                             | \$3.8M per MW per year                                 | Derived   | CoreWeave's trailing 12-month cash costs per MW, excluding stock comp ([Q2 2026 10-Q](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/crwv-20260630.htm)) |
+| $\delta$, rent decline after the first contract | 7% a year                                              | Derived   | A100 and H100 price history ([Silicon Data](https://www.silicondata.com/) & [SemiAnalysis](https://gpu-index.semianalysis.com/), above) |
+| $L$, useful life                                | 8 years                                                | Derived   | [Silicon Data's](https://www.silicondata.com/) 8-year end-of-life cutoff (vs. [6-year accounting life in 10-K](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000104/R9.htm)) |
+| $r$, cost of debt                               | 10%                                                    | Assumed   | CoreWeave's [August 2026 DDTL 5.5 loan](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000357/crwv-20260807.htm) at SOFR + 5.5% (~9.4%), rounded up |
+| Sold but not yet built                          | ≈1.4 GW                                                | Derived   | Contract backlog ([\$103.7B RPO](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R8.htm) + [\$25B Q3 additions](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000429/crwv2026convertpresentat.htm)) minus remaining revenue on active chips, divided by revenue per MW |
+| $D_{\text{net}}$, what's owed                   | \$38.6B                                                | Disclosed | [June 2026 balance sheet](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R2.htm) plus subsequent [DDTL 5.5/RCF](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R22.htm) and [Sept 2026 convert](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000432/crwv-20260917.htm): [\$28.7B net debt](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R16.htm), [\$9.7B customer prepayments](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R8.htm), [\$0.2B finance leases](https://www.sec.gov/Archives/edgar/data/1769628/000176962826000366/R14.htm) |
+
+</div>
+
+If you don't like any of my assumptions, you can change every single one of them in the interactive calculator below (or in the [spreadsheet](https://docs.google.com/spreadsheets/d/1YrNBFM47EAufZWO7uvdryZzRA-TGk44gpl_EhZjjmYA/edit?usp=sharing)).
+
+## So, is it worth zero?
+
+When you run the math, CoreWeave's business splits cleanly into two pieces:
+
+1. **What's already signed:** Take the chips already running, add the ~1.4 GW of contracts sold but not yet built and the cash already spent on construction, and subtract the \$38.6B CoreWeave owes. You are left with about **\$11.9 billion**, or **\$20 a share**. The stock trades at **\$61.39**.
+2. **What isn't signed yet:** So about two-thirds of today's stock price is a bet on contracts CoreWeave hasn't signed yet. For the stock to be worth \$61, those have to clear **\$3.58 per GPU-hour**, 23% more than Microsoft pays IREN.
+
+That \$20 rests on our \$3.37 estimate, the shakiest number in the whole model. Here's how much it matters:
+
+<figure class="distill-figure figure-wide"><div class="figure-content"><img src="/images/posts/coreweave/mix_value.png" alt="Line chart: value per share of what CoreWeave has already signed, by the average price those contracts pay" /></div></figure>
+
+
+At IREN's price, what's signed is worth \$4.50 a share. At Nebius's, \$34. Even the best case covers barely half of today's price.
+
+In my base case (future contracts at \$3.30/hr), the stock is worth about **\$39 a share**. Not zero, but more than a third below today's price.
+
+Getting to zero takes two things going wrong at once:
+* If chips only last **6 years** (what CoreWeave itself assumes in its accounting) and its borrowing cost rises to **12%**, the stock is worth about **\$2**.
+* At the ~**15%** its bonds yield today, it's worth about **\$4**, before anything else goes wrong.
+
+## What could prove me wrong?
+
+A lot, and it's worth being upfront about what the bull case looks like in this same model:
+
+* **Future contracts clear well above \$3.58/hr.** Today's 3-year open-market rate for Blackwell chips on Silicon Data is \$5.66/hr. If hyperscalers lose their bargaining power and have to sign long-term deals anywhere near \$5.66/hr, the stock isn't a zero—it's worth ~\$230 a share.
+* **GPUs last longer than 8 years.** If Blackwell chips stay economically useful for 10 years instead of 8, my base case jumps from \$39 to **\$53 a share**.
+* **Old chips hold their rent better.** If post-contract rent decays at just 3% a year instead of 7%, the base case jumps to **\$70 a share**, above today's price.
+* **Borrowing gets cheaper.** CoreWeave has already brought its average interest rate down from ~15% at the end of 2023 to ~8.4% today. If its marginal cost of capital drops to 8%, the base case rises to **\$59 a share**.
+* **Things outside this simple model:** Tax shields from past net operating losses, upside from its software business (Weights & Biases), or a buyout by a cash-rich tech giant.
+
+Play with the sliders below and see where you land.
 
 ## Try it yourself
 
-Five knobs, one answer. Start from my assumptions, then move whatever you disagree with.
-
 <CoreWeaveModel client:visible />
+
+---
+
+*Disclosure: I don't own, and am not short, CoreWeave stock, its options, or any of its peers. I have no exposure whatsoever. The opinions here are my own and have nothing to do with my employer. This is a model, not a forecast, and not investment advice. Share price as of October 16, 2026.*

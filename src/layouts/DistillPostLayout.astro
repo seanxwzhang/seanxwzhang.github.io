@@ -194,6 +194,15 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
     padding-left: 1.5rem;
   }
 
+  /* Tailwind's preflight strips list markers; bring them back for article text */
+  .article-content :global(ul) {
+    list-style: disc;
+  }
+
+  .article-content :global(ol) {
+    list-style: decimal;
+  }
+
   .article-content :global(li) {
     margin-bottom: 0.35rem;
   }
