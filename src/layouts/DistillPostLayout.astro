@@ -15,6 +15,27 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric',
 });
+
+// Length and reading time, Substack-style. Count prose only: drop imports, styles,
+// code, display math, markup and link targets. CJK characters count one each.
+const prose = (post.body ?? '')
+  .replace(/^import .*$/gm, '')
+  .replace(/<style>[\s\S]*?<\/style>/g, ' ')
+  .replace(/```[\s\S]*?```/g, ' ')
+  .replace(/\$\$[\s\S]*?\$\$/g, ' ')
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+  .replace(/\]\([^)]*\)/g, ']')
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/https?:\/\/\S+/g, ' ');
+const CJK = /[㐀-鿿豈-﫿]/g;
+const cjkChars = (prose.match(CJK) ?? []).length;
+const words = prose.replace(CJK, ' ').split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w)).length;
+const minutes = Math.max(1, Math.round(words / 238 + cjkChars / 400));
+const mostlyCJK = cjkChars > words;
+const lengthLabel = mostlyCJK
+  ? `${(cjkChars + words).toLocaleString('en-US')} 字`
+  : `${words.toLocaleString('en-US')} words`;
+const readLabel = mostlyCJK ? `约 ${minutes} 分钟读完` : `${minutes} min read`;
 ---
 
 <DistillLayout title={title} description={description} currentSlug={post.slug}>
@@ -24,9 +45,15 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
         {title}
       </h1>
       <div class="article-meta">
-        <time datetime={date.toISOString()}>
-          {formattedDate}
-        </time>
+        <span class="article-stats">
+          <time datetime={date.toISOString()}>
+            {formattedDate}
+          </time>
+          <span aria-hidden="true">&middot;</span>
+          <span>{lengthLabel}</span>
+          <span aria-hidden="true">&middot;</span>
+          <span>{readLabel}</span>
+        </span>
         {tags && tags.length > 0 && (
           <div class="article-tags">
             {tags.map((tag: string) => (
@@ -92,6 +119,13 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
     gap: 1rem;
     font-size: 0.875rem;
     color: theme('colors.ink.muted');
+  }
+
+  .article-stats {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    white-space: nowrap;
   }
 
   .article-tags {
