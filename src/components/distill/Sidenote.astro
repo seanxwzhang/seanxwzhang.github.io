@@ -1,0 +1,90 @@
+---
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<span class="sidenote-wrapper">
+  <label class="sidenote-toggle" for={`sn-${id}`} aria-label="Toggle sidenote">
+    <sup class="sidenote-number"></sup>
+  </label>
+  <input type="checkbox" id={`sn-${id}`} class="sidenote-checkbox" />
+  <span class="sidenote">
+    <slot />
+  </span>
+</span>
+
+<style>
+  .sidenote-wrapper {
+    position: relative;
+  }
+
+  .sidenote-checkbox {
+    display: none;
+  }
+
+  .sidenote-toggle {
+    cursor: pointer;
+  }
+
+  .sidenote-number {
+    counter-increment: sidenote-counter;
+  }
+
+  .sidenote-number::after {
+    content: counter(sidenote-counter);
+    font-size: 0.75em;
+    vertical-align: super;
+    color: theme('colors.coral.DEFAULT');
+    font-weight: 500;
+  }
+
+  .sidenote {
+    float: right;
+    clear: right;
+    width: var(--margin-width, 220px);
+    margin-right: calc(-1 * var(--margin-width, 220px) - var(--margin-gap, 40px));
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: theme('colors.ink.light');
+    position: relative;
+  }
+
+  .sidenote::before {
+    content: counter(sidenote-counter) ". ";
+    color: theme('colors.coral.DEFAULT');
+    font-weight: 500;
+  }
+
+  @media (max-width: 1200px) {
+    .sidenote {
+      display: none;
+      float: none;
+      width: auto;
+      margin-right: 0;
+      margin-top: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: theme('colors.cream.100');
+      border-left: 3px solid theme('colors.coral.DEFAULT');
+      border-radius: 0 0.375rem 0.375rem 0;
+    }
+
+    .sidenote-checkbox:checked + .sidenote {
+      display: block;
+    }
+
+    .sidenote-toggle {
+      text-decoration: underline;
+      text-decoration-color: theme('colors.coral.light');
+      text-underline-offset: 2px;
+    }
+  }
+
+  @media (min-width: 1201px) {
+    .sidenote-toggle {
+      cursor: default;
+    }
+  }
+</style>

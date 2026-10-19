@@ -1,0 +1,349 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/transitions.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  currentSlug?: string;
+}
+
+const { title, description = 'Learning, thinking, and writing.', currentSlug } = Astro.props;
+const siteTitle = 'Steady State';
+const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const otherPosts = currentSlug
+  ? sortedPosts.filter(p => p.slug !== currentSlug)
+  : sortedPosts;
+
+const categories = [
+  { name: 'Deep Learning', slug: 'deep-learning' },
+  { name: 'Engineering', slug: 'engineering' },
+  { name: 'Market', slug: 'market' },
+  { name: 'Rambling', slug: 'rambling' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Sean Zhang" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content={siteTitle} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@seeeeaaaannnnnn" />
+
+    <title>{fullTitle}</title>
+    <ClientRouter />
+  </head>
+  <body class="min-h-screen bg-cream-50 text-ink">
+    <!-- Menu Toggle Button (fixed) -->
+    <button
+      id="menu-toggle"
+      class="menu-toggle"
+      aria-label="Open navigation menu"
+      title="Menu"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Overlay Menu -->
+    <div id="menu-overlay" class="menu-overlay">
+      <div class="menu-panel">
+        <button id="menu-close" class="menu-close" aria-label="Close menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        
+        <a href="/" class="block font-serif text-2xl font-semibold text-ink hover:text-coral transition-colors mb-8">
+          Steady State
+        </a>
+
+        <nav class="mb-8">
+          <h3 class="text-xs font-medium text-ink-muted uppercase tracking-wider mb-3">Categories</h3>
+          <ul class="space-y-2">
+            {categories.map(cat => (
+              <li>
+                <a
+                  href={`/categories/${cat.slug}`}
+                  class="block py-1 text-ink-light hover:text-coral transition-colors"
+                >
+                  {cat.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div class="border-t border-cream-300 pt-6 mb-6">
+          <h3 class="text-xs font-medium text-ink-muted uppercase tracking-wider mb-3">Recent Posts</h3>
+          <ul class="space-y-3">
+            {otherPosts.slice(0, 5).map(post => (
+              <li>
+                <a
+                  href={`/blog/${post.slug}`}
+                  class="block text-sm text-ink-light hover:text-coral transition-colors line-clamp-2"
+                >
+                  {post.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="border-t border-cream-300 pt-6">
+          <div class="flex items-center gap-4 text-sm">
+            <a href="/about" class="text-ink-muted hover:text-coral transition-colors">About</a>
+            <a href="/rss.xml" class="text-ink-muted hover:text-coral transition-colors" title="RSS Feed">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="distill-container" id="main-content" style="view-transition-name: post-content">
+      <main class="distill-content">
+        <slot />
+      </main>
+
+      <footer class="distill-footer">
+        <p>&copy; {new Date().getFullYear()} Sean Zhang. All rights reserved.</p>
+        <p class="mt-2">
+          <a href="https://twitter.com/seeeeaaaannnnnn" class="hover:text-coral transition-colors">Twitter</a>
+          {' '}&middot;{' '}
+          <a href="https://github.com/seanxwzhang" class="hover:text-coral transition-colors">GitHub</a>
+          {' '}&middot;{' '}
+          <a href="mailto:sz@seanzhang.me" class="hover:text-coral transition-colors">Email</a>
+        </p>
+      </footer>
+    </div>
+
+    <script is:inline>
+      (function() {
+        const toggle = document.getElementById('menu-toggle');
+        const close = document.getElementById('menu-close');
+        const overlay = document.getElementById('menu-overlay');
+
+        if (!toggle || !close || !overlay) return;
+
+        toggle.addEventListener('click', () => {
+          overlay.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        });
+
+        close.addEventListener('click', () => {
+          overlay.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+          }
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && overlay.classList.contains('open')) {
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: rgba(224, 122, 95, 0.2);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #D4D1C9;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B8B5AD;
+  }
+
+  :root {
+    --content-width: 650px;
+    --margin-width: 220px;
+    --margin-gap: 40px;
+    counter-reset: sidenote-counter;
+  }
+</style>
+
+<style>
+  .menu-toggle {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 50;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid theme('colors.cream.300');
+    border-radius: 0.5rem;
+    color: theme('colors.ink.light');
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .menu-toggle:hover {
+    background: theme('colors.cream.100');
+    color: theme('colors.ink.DEFAULT');
+  }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .menu-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .menu-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 320px;
+    max-width: 85vw;
+    background: white;
+    padding: 2rem;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .menu-overlay.open .menu-panel {
+    transform: translateX(0);
+  }
+
+  .menu-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: theme('colors.ink.muted');
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
+  }
+
+  .menu-close:hover {
+    background: theme('colors.cream.100');
+    color: theme('colors.ink.DEFAULT');
+  }
+
+  .distill-container {
+    max-width: calc(var(--content-width) + var(--margin-width) + var(--margin-gap) + 80px);
+    margin: 0 auto;
+    padding: 2rem 2.5rem 2rem calc(2.5rem + 60px);
+    min-height: 100vh;
+  }
+
+  .distill-content {
+    max-width: var(--content-width);
+  }
+
+  .distill-footer {
+    max-width: var(--content-width);
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid theme('colors.cream.300');
+    text-align: center;
+    font-size: 0.875rem;
+    color: theme('colors.ink.muted');
+  }
+
+  @media (max-width: 1200px) {
+    :root {
+      --margin-width: 0px;
+      --margin-gap: 0px;
+    }
+
+    .distill-container {
+      max-width: 100%;
+      padding: 1.5rem 1rem 1.5rem calc(1rem + 60px);
+    }
+
+    .distill-content {
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .menu-toggle {
+      top: 1rem;
+      left: 1rem;
+      width: 40px;
+      height: 40px;
+    }
+
+    .distill-container {
+      padding: 1rem 1rem 1rem calc(1rem + 52px);
+    }
+  }
+</style>
