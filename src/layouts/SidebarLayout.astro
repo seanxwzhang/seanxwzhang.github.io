@@ -44,17 +44,17 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
     <title>{fullTitle}</title>
     <ClientRouter />
   </head>
-  <body class="min-h-screen bg-cream-100 bg-grid-pattern text-ink">
+  <body class="min-h-screen bg-cream-50 text-ink">
     <!-- Sidebar -->
     <Sidebar currentSlug={currentSlug} />
 
     <!-- Main Content -->
     <div class="main-content" id="main-content" style="view-transition-name: post-content">
-      <main class="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      <main class="mx-auto max-w-[850px] px-4 py-8 sm:px-6 lg:px-8">
         <slot />
       </main>
 
-      <footer class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 mt-16 border-t border-cream-300 pt-8 text-center text-sm text-ink-muted">
+      <footer class="mx-auto max-w-[850px] px-4 sm:px-6 lg:px-8 mt-16 border-t border-cream-300 pt-8 text-center text-sm text-ink-muted">
         <p>&copy; {new Date().getFullYear()} Sean Zhang. All rights reserved.</p>
         <p class="mt-2">
           <a href="https://twitter.com/seeeeaaaannnnnn" class="hover:text-coral transition-colors">Twitter</a>
@@ -114,7 +114,7 @@ const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
 
 <style>
   .main-content {
-    margin-left: 280px;
+    margin-left: 220px;
     min-height: 100vh;
     transition: margin-left 0.3s ease;
   }
