@@ -71,18 +71,18 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
   }
 
   .article-header {
-    margin-bottom: 2.5rem;
-    padding-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid theme('colors.cream.300');
   }
 
   .article-title {
     font-family: theme('fontFamily.serif');
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-weight: 600;
     color: theme('colors.ink.DEFAULT');
     line-height: 1.2;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
   }
 
   .article-meta {
@@ -117,31 +117,31 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 
   .article-content {
     font-family: theme('fontFamily.serif');
-    font-size: 1.125rem;
-    line-height: 1.8;
+    font-size: 1.0625rem;
+    line-height: 1.6;
     color: theme('colors.ink.DEFAULT');
   }
 
   .article-content :global(h2) {
     font-family: theme('fontFamily.serif');
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: theme('colors.ink.DEFAULT');
-    margin-top: 3rem;
-    margin-bottom: 1rem;
-  }
-
-  .article-content :global(h3) {
-    font-family: theme('fontFamily.serif');
-    font-size: 1.375rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: theme('colors.ink.DEFAULT');
     margin-top: 2rem;
     margin-bottom: 0.75rem;
   }
 
+  .article-content :global(h3) {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
   .article-content :global(p) {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
 
   .article-content :global(a) {
@@ -158,8 +158,8 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 
   .article-content :global(blockquote) {
     border-left: 4px solid theme('colors.coral.DEFAULT');
-    padding-left: 1.25rem;
-    margin: 1.5rem 0;
+    padding-left: 1rem;
+    margin: 1rem 0;
     font-style: italic;
     color: theme('colors.ink.light');
   }
@@ -167,19 +167,19 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
   .article-content :global(code:not(pre code)) {
     font-family: theme('fontFamily.mono');
     background: theme('colors.cream.200');
-    padding: 0.15rem 0.4rem;
+    padding: 0.1rem 0.35rem;
     border-radius: 0.25rem;
-    font-size: 0.9em;
+    font-size: 0.875em;
   }
 
   .article-content :global(pre) {
     background: theme('colors.cream.200');
     border-radius: 0.5rem;
-    padding: 1.25rem;
+    padding: 1rem;
     overflow-x: auto;
-    margin: 1.5rem 0;
-    font-size: 0.875rem;
-    line-height: 1.6;
+    margin: 1rem 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
 
   .article-content :global(pre code) {
@@ -190,32 +190,44 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 
   .article-content :global(ul),
   .article-content :global(ol) {
-    margin: 1.25rem 0;
+    margin: 1rem 0;
     padding-left: 1.5rem;
   }
 
   .article-content :global(li) {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
   }
 
   .article-content :global(img) {
     max-width: 100%;
     height: auto;
     border-radius: 0.5rem;
-    margin: 1.5rem 0;
+    margin: 1.25rem auto;
+    display: block;
+  }
+
+  .article-content :global(img + em),
+  .article-content :global(p > img + br + em),
+  .article-content :global(p:has(> img) + p > em:only-child) {
+    display: block;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: theme('colors.ink.light');
+    margin-top: -0.75rem;
+    margin-bottom: 1rem;
   }
 
   .article-content :global(hr) {
     border: none;
     border-top: 1px solid theme('colors.cream.300');
-    margin: 2.5rem 0;
+    margin: 2rem 0;
   }
 
   .article-content :global(table) {
     width: 100%;
-    margin: 1.5rem 0;
+    margin: 1rem 0;
     border-collapse: collapse;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .article-content :global(th),
@@ -251,7 +263,7 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
 
   @media (max-width: 640px) {
     .article-title {
-      font-size: 1.875rem;
+      font-size: 1.75rem;
     }
 
     .article-content {
@@ -259,11 +271,11 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
     }
 
     .article-content :global(h2) {
-      font-size: 1.5rem;
+      font-size: 1.375rem;
     }
 
     .article-content :global(h3) {
-      font-size: 1.25rem;
+      font-size: 1.125rem;
     }
   }
 </style>

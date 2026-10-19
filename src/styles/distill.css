@@ -1,7 +1,7 @@
 /* Distill/Tufte-style sidenotes and margin notes */
 
 :root {
-  --content-width: 650px;
+  --content-width: 700px;
   --margin-width: 220px;
   --margin-gap: 40px;
   counter-reset: sidenote-counter;
@@ -85,11 +85,14 @@
 
 /* Figure styles */
 .distill-figure {
-  margin: 2rem 0;
+  margin: 1.5rem 0;
+  text-align: center;
 }
 
 .figure-content {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .figure-content img,
@@ -101,20 +104,26 @@
 }
 
 .figure-caption {
-  margin-top: 0.75rem;
-  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
   color: #4A5568;
   line-height: 1.5;
   font-family: 'Inter', system-ui, sans-serif;
+  text-align: center;
 }
 
 .figure-normal {
   max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .figure-wide {
-  width: calc(100% + var(--margin-width, 220px) + var(--margin-gap, 40px));
-  max-width: calc(100% + var(--margin-width, 220px) + var(--margin-gap, 40px));
+  --wide-extra: calc(var(--margin-width, 220px) + var(--margin-gap, 40px));
+  width: calc(100% + var(--wide-extra));
+  max-width: calc(100% + var(--wide-extra));
+  margin-left: calc(-0.5 * var(--wide-extra));
+  margin-right: calc(-0.5 * var(--wide-extra));
 }
 
 .figure-full {
@@ -129,7 +138,7 @@
 }
 
 .figure-full .figure-caption {
-  max-width: var(--content-width, 650px);
+  max-width: var(--content-width, 700px);
   margin-left: auto;
   margin-right: auto;
   padding: 0 1rem;
@@ -189,6 +198,8 @@
   .figure-wide {
     width: 100%;
     max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
