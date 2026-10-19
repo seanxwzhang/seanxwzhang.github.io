@@ -1,0 +1,102 @@
+---
+title: "Why your CoreWeave stocks are worth nothing"
+date: 2026-10-19
+description: "A neocloud is a chip-rental business run on borrowed money. Follow one GPU from purchase to retirement, then test the math yourself."
+tags: [CoreWeave, AI, GPU, Valuation]
+category: market
+draft: true
+slug: coreweave_worth_nothing
+---
+
+import CoreWeaveModel from '../../components/coreweave/CoreWeaveModel.tsx';
+import 'katex/dist/katex.min.css';
+
+On [July 8, 2008](https://www.reuters.com/article/business/energy/transocean-rig-gets-record-650000-dayrate-idUSN08177559/), **Transocean (`NYSE: RIG`)** [disclosed in an SEC filing](https://www.sec.gov/Archives/edgar/data/1083269/000119312508148448/dex991.htm) a deal that stunned Wall Street: oil giant Eni had agreed to rent a single ultra-deepwater drillship, the *Deepwater Pathfinder*, for a record **\$650,000 a day** over five years.
+
+At the time, oil was above \$140 a barrel and the world was desperate for rigs. Transocean’s contract backlog topped \$40 billion, its stock traded near **\$160**, and the math looked bulletproof: borrow hundreds of millions of dollars to build a ship, lock in a supermajor on a five-year take-or-pay contract, and print money.
+
+When that five-year contract expired in March 2015, newer-generation drillships had flooded the market. Nobody wanted an older rig. Transocean [parked the *Pathfinder* twelve miles off the coast of Trinidad](https://gcaptain.com/oils-biggest-rigs-get-sent-to-junkyard-as-daily-losses-mount/) with its engines off for two years before [sending it to the scrapyard in September 2017](https://www.sec.gov/Archives/edgar/data/1451505/000145150517000063/c505-20170922x8k.htm). Transocean is still public today—nearly twenty years later, **`RIG` trades at \$5.62, down 96% from its peak.** The five-year contracts were real, the customers paid on time, and the debtholders were made whole—but shareholders got wiped out.
+
+![Share prices: Transocean (RIG) peaked in 2008 and fell 96%; AerCap (AER), an aircraft lessor, kept climbing](/images/posts/coreweave/rig_vs_aer.png)
+
+Now you can see the remarkable resemblance between Transocean and neo-cloud companies like **CoreWeave**, whose business model can be summarized as:
+
+> You pay $X$ amount of money for a computer chip with borrowed money, then rent the chip out by the hour and hope it earns back more than the loan costs before it becomes worthless.
+
+When your business is using 90% debt to rent out assets, it's going to end in one of two ways. The good way is if the asset has a long useful life and doesn't go obsolete--like a Boeing 737, which flies for 25 years and pays off its loan 3 times over. The bad way is if the assets are rendered obsolete before the debt is even paid off. 
+
+In the next few sections, we'll try to find out which case CoreWeave belongs to. If the details are too boring, feel free to jump to the end where I assembled an interactive model for you to test your own hypothesis. After all, future is not predictable and we are all here watching history being made live.
+
+## Model
+
+To understand why CoreWeave's stocks can potentially be worth \$0, we need to figure out a couple important variables:
+
+* **Upfront Cost ($X$):** The all-in capital expenditure to buy the chip, networking gear, and plug it into a data center.
+
+* **Hourly Rent ($P$), Contract Length ($T$), and Capacity Utilization ($u$):** How much a customer pay per hour and how long a contract lasts, and to what extent the capacity is being utilized.
+
+* **Cash Operating Cost ($c$):** What it costs per hour just to keep the lights on—electricity, data center rent, and maintenance.
+
+* **The "Aging Curve" — Price Decay ($\delta$) & Lifespan ($L$):** Once the first 5-year contract ends, how fast the chip's rental price drops each year ($\delta$) as newer chips arrive, and the maximum economic life ($L$, ~8 years) before it becomes e-waste.
+
+* **Cost of Debt ($r$):** The interest rate on the borrowed money (~9–10% on marginal secured debt). 
+
+For a single chip (or megawatt of chips) to create any value at all, the present value of its net rental cash flows over its lifespan must beat its upfront cost:
+
+$$
+
+\text{NPV} = \underbrace{\sum_{t=1}^{T} \frac{P \cdot u - c}{(1+r)^t}}_{\text{Initial Contract}} + \underbrace{\sum_{t=T+1}^{L} \frac{P(1-\delta)^{t-1} \cdot u - c}{(1+r)^t}}_{\text{Post-Contract Tail (Residual Value)}} - X
+
+$$
+
+And to get what your **stock** is worth, you add up the NPV of all those chips and subtract the massive mountain of debt and customer prepayments (right now it's around $D_{\text{net}} \approx$ \$38.6B) sitting ahead of equity:
+
+$$
+
+\text{Equity Value} = \sum \text{NPV}_{\text{chips}} - D_{\text{net}}
+
+$$
+
+## Data
+
+Every number in the model can be traced to something public: CoreWeave's own filings, contract announcements from it and its competitors, and GPU rental price indices. I won't walk through all of them here (the full list lives in the Data tab), but two examples show how the pieces get pinned down.
+
+**Example 1: what a chip rents for ($P$), and what it costs ($X$).**
+
+CoreWeave doesn't publish its contract prices. But in November 2025 one of its competitors, IREN, announced a five-year, \$9.7 billion deal with Microsoft for roughly 76,000 of Nvidia's GB300 chips. Spread that evenly over every hour of the contract:
+
+$$
+P \approx \frac{\$9.7\text{B}}{5\ \text{yrs} \times 76{,}000\ \text{GPUs} \times 8{,}760\ \text{hrs/yr}} \approx \$2.91\ \text{per GPU-hour}
+$$
+
+That's what a hyperscaler pays when it signs for five years and tens of thousands of chips at once, and it's our anchor for $P$ on CoreWeave's big contracts. The same announcement also gives us $X$: IREN ordered \$5.8 billion of servers and networking gear from Dell for those chips, about \$76,000 per GPU. The model actually uses a lower figure, about \$69,000 all-in, which is generous to CoreWeave.
+
+**Example 2: how fast old chips lose value ($\delta$ and $L$).**
+
+The best evidence is the A100, the chip behind the first ChatGPT, launched in 2020. When it was new, CoreWeave's own public price list charged \$2.21 an hour for it. Today, Silicon Data's A100 rental index sits at about \$1.53. Over almost six years, that works out to
+
+$$
+\delta \approx 1 - \left(\frac{1.53}{2.21}\right)^{1/5.8} \approx 6\%\ \text{per year}
+$$
+
+The H100, two years younger, shows about 5% a year. The model uses 7%, since the old list price left out the CPU and memory that are now bundled into the index.
+
+Lifespan $L$ comes from the same data, with a twist. Silicon Data also estimates what a used A100 is worth, and that estimate fell 46% in 18 months while the A100's rent barely moved. The chip didn't get cheaper to rent; it just had fewer years left to earn. Silicon Data treats every chip as done eight years after launch (for the A100, May 2028), so that's what we use for $L$.
+
+**Everything else**, briefly:
+
+| Variable             | Where it comes from                                                                                                                       |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| $T$, contract length | CoreWeave's annual report: contracts average about five years                                                                             |
+| $u$, utilization     | Assumed 95%; take-or-pay contracts bill close to 100%                                                                                     |
+| $c$, operating cost  | CoreWeave's actual cash costs per megawatt over the past year, excluding stock compensation (about \$3.8M per MW per year)                |
+| $r$, cost of debt    | CoreWeave's latest chip-backed loan, priced at SOFR + 5.5% (about 9.4%), rounded up to 10%                                                |
+| $D_{\text{net}}$     | CoreWeave's June 2026 balance sheet plus debt raised since: \$28.7B of net debt, \$9.7B of customer prepayments, \$0.2B of finance leases |
+
+None of these are gospel. Every one of them is a knob you can turn in the model below.
+
+## Try it yourself
+
+Five knobs, one answer. Start from my assumptions, then move whatever you disagree with.
+
+<CoreWeaveModel client:visible />
