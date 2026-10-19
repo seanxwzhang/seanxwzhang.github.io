@@ -41,9 +41,14 @@ const categoryNames: Record<string, string> = {
                 {formattedDate}
               </time>
               <span>&middot;</span>
-              <a href={`/categories/${post.data.category}`} class="hover:text-coral transition-colors">
-                {categoryNames[post.data.category] ?? post.data.category}
-              </a>
+              {post.data.category.map((cat, j) => (
+                <>
+                  {j > 0 && <span>&middot;</span>}
+                  <a href={`/categories/${cat}`} class="hover:text-coral transition-colors">
+                    {categoryNames[cat] ?? cat}
+                  </a>
+                </>
+              ))}
             </div>
           </header>
 

@@ -14,7 +14,7 @@ const categories = [
 // Count posts per category
 const categoryCounts = categories.map(cat => ({
   ...cat,
-  count: posts.filter(p => p.data.category === cat.slug).length,
+  count: posts.filter(p => (p.data.category as string[]).includes(cat.slug)).length,
 }));
 ---
 
