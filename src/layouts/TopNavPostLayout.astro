@@ -1,0 +1,501 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/transitions.css';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+const { post } = Astro.props;
+const { title, date, tags, description } = post.data;
+const siteTitle = 'Steady State';
+const fullTitle = `${title} | ${siteTitle}`;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Sean Zhang" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content={siteTitle} />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@seeeeaaaannnnnn" />
+
+    <title>{fullTitle}</title>
+    <ClientRouter />
+  </head>
+  <body class="min-h-screen bg-white text-ink">
+    <div class="topnav-container">
+      <!-- Top Navigation -->
+      <header class="topnav-header">
+        <nav class="topnav">
+          <a href="/" class="site-title">
+            Steady State
+          </a>
+          
+          <!-- Desktop Navigation -->
+          <div class="nav-links">
+            <a href="/categories/deep-learning" class="nav-link">Deep Learning</a>
+            <a href="/categories/engineering" class="nav-link">Engineering</a>
+            <a href="/categories/market" class="nav-link">Market</a>
+            <a href="/categories/rambling" class="nav-link">Rambling</a>
+            <a href="/about" class="nav-link">About</a>
+            <a href="/rss.xml" class="nav-link rss-link" title="RSS Feed">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 5c7.18 0 13 5.82 13 13M6 11a7 7 0 017 7m-6 0a1 1 0 11-2 0 1 1 0 012 0z" />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </nav>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-nav" class="mobile-nav">
+          <a href="/categories/deep-learning" class="mobile-nav-link">Deep Learning</a>
+          <a href="/categories/engineering" class="mobile-nav-link">Engineering</a>
+          <a href="/categories/market" class="mobile-nav-link">Market</a>
+          <a href="/categories/rambling" class="mobile-nav-link">Rambling</a>
+          <a href="/about" class="mobile-nav-link">About</a>
+          <a href="/rss.xml" class="mobile-nav-link">RSS Feed</a>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="topnav-main" style="view-transition-name: post-content">
+        <article class="post-article prose prose-lg max-w-none">
+          <header class="post-header">
+            <h1 class="post-title">{title}</h1>
+            <div class="post-meta">
+              <time datetime={date.toISOString()}>
+                {formattedDate}
+              </time>
+              {tags && tags.length > 0 && (
+                <div class="post-tags">
+                  {tags.map((tag: string) => (
+                    <a href={`/tags/${tag}`} class="tag">
+                      {tag}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </header>
+
+          <div class="post-content">
+            <slot />
+          </div>
+        </article>
+
+        <!-- Comments Section -->
+        <section class="comments-section">
+          <h2 class="comments-title">Comments</h2>
+          <div id="utterances-container">
+            <script
+              src="https://utteranc.es/client.js"
+              repo="seanxwzhang/seanxwzhang.github.io"
+              issue-term="pathname"
+              theme="github-light"
+              crossorigin="anonymous"
+              async
+            ></script>
+          </div>
+          <noscript>
+            <p class="text-ink-muted">Enable JavaScript to view comments.</p>
+          </noscript>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="topnav-footer">
+        <p>&copy; {new Date().getFullYear()} Sean Zhang. All rights reserved.</p>
+        <p class="footer-links">
+          <a href="https://twitter.com/seeeeaaaannnnnn" class="footer-link">Twitter</a>
+          <span>&middot;</span>
+          <a href="https://github.com/seanxwzhang" class="footer-link">GitHub</a>
+          <span>&middot;</span>
+          <a href="mailto:sz@seanzhang.me" class="footer-link">Email</a>
+        </p>
+      </footer>
+    </div>
+
+    <script is:inline>
+      (function() {
+        const btn = document.getElementById('mobile-menu-btn');
+        const nav = document.getElementById('mobile-nav');
+        if (!btn || !nav) return;
+
+        btn.addEventListener('click', () => {
+          nav.classList.toggle('open');
+          btn.setAttribute('aria-expanded', nav.classList.contains('open'));
+        });
+      })();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  html {
+    scroll-behavior: smooth;
+  }
+
+  ::selection {
+    background-color: rgba(224, 122, 95, 0.2);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #D4D1C9;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #B8B5AD;
+  }
+</style>
+
+<style>
+  .topnav-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topnav-header {
+    border-bottom: 1px solid theme('colors.cream.300');
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .topnav {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .site-title {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    transition: color 0.2s ease;
+  }
+
+  .site-title:hover {
+    color: theme('colors.coral.DEFAULT');
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+    color: theme('colors.ink.light');
+    transition: color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: theme('colors.coral.DEFAULT');
+  }
+
+  .rss-link {
+    display: flex;
+    align-items: center;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    color: theme('colors.ink.light');
+    cursor: pointer;
+  }
+
+  .mobile-nav {
+    display: none;
+    padding: 0.5rem 1.5rem 1rem;
+    border-top: 1px solid theme('colors.cream.300');
+  }
+
+  .mobile-nav.open {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-nav-link {
+    padding: 0.5rem 0;
+    color: theme('colors.ink.light');
+    font-size: 0.95rem;
+  }
+
+  .mobile-nav-link:hover {
+    color: theme('colors.coral.DEFAULT');
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: block;
+    }
+  }
+
+  .topnav-main {
+    flex: 1;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .post-article {
+    /* Base article styles */
+  }
+
+  .post-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid theme('colors.cream.300');
+  }
+
+  .post-title {
+    font-family: theme('fontFamily.serif');
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: theme('colors.ink.muted');
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag {
+    padding: 0.25rem 0.75rem;
+    background: theme('colors.cream.200');
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: theme('colors.ink.light');
+    transition: all 0.2s ease;
+  }
+
+  .tag:hover {
+    background: theme('colors.coral.DEFAULT');
+    color: white;
+  }
+
+  .post-content :global(h2) {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .post-content :global(h3) {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .post-content :global(p) {
+    color: theme('colors.ink.DEFAULT');
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+  }
+
+  .post-content :global(a) {
+    color: theme('colors.coral.DEFAULT');
+    text-decoration: underline;
+    text-decoration-color: rgba(224, 122, 95, 0.3);
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .post-content :global(a:hover) {
+    text-decoration-color: theme('colors.coral.DEFAULT');
+  }
+
+  .post-content :global(blockquote) {
+    border-left: 4px solid theme('colors.coral.DEFAULT');
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: theme('colors.ink.light');
+  }
+
+  .post-content :global(code:not(pre code)) {
+    background: theme('colors.cream.200');
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    font-family: theme('fontFamily.mono');
+  }
+
+  .post-content :global(pre) {
+    background: theme('colors.cream.200');
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .post-content :global(pre code) {
+    background: transparent;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+
+  .post-content :global(ul),
+  .post-content :global(ol) {
+    margin: 1.25rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .post-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .post-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .post-content :global(hr) {
+    border: none;
+    border-top: 1px solid theme('colors.cream.300');
+    margin: 2.5rem 0;
+  }
+
+  .post-content :global(table) {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+  }
+
+  .post-content :global(th),
+  .post-content :global(td) {
+    border: 1px solid theme('colors.cream.300');
+    padding: 0.75rem 1rem;
+    text-align: left;
+  }
+
+  .post-content :global(th) {
+    background: theme('colors.cream.200');
+    font-weight: 600;
+  }
+
+  .comments-section {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid theme('colors.cream.300');
+  }
+
+  .comments-title {
+    font-family: theme('fontFamily.serif');
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: theme('colors.ink.DEFAULT');
+    margin-bottom: 1.5rem;
+  }
+
+  .topnav-footer {
+    border-top: 1px solid theme('colors.cream.300');
+    padding: 2rem 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: theme('colors.ink.muted');
+  }
+
+  .footer-links {
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .footer-link {
+    color: theme('colors.ink.muted');
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: theme('colors.coral.DEFAULT');
+  }
+
+  @media (max-width: 640px) {
+    .post-title {
+      font-size: 1.875rem;
+    }
+
+    .topnav-main {
+      padding: 1.5rem 1rem;
+    }
+  }
+</style>
