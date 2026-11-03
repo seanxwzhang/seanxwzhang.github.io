@@ -1,0 +1,16 @@
+<figure class="distill-figure figure-wide model-release-figure">
+  <div class="figure-content">
+    <iframe src="/model-release-chart.html" title="Interactive AI model release timeline" loading="lazy" data-model-release-embed style="width:100%;height:1250px;border:0"></iframe>
+  </div>
+</figure>
+<script is:inline>
+  if (!window.modelReleaseEmbedListenerInstalled) {
+    window.modelReleaseEmbedListenerInstalled = true;
+    window.addEventListener('message', function(event) {
+      const frame = document.querySelector('iframe[data-model-release-embed]');
+      const height = event.data?.height;
+      if (event.origin !== location.origin || event.source !== frame?.contentWindow || event.data?.type !== 'model-release-chart-height' || !Number.isFinite(height) || height < 100 || height > 10000) return;
+      frame.style.height = height + 'px';
+    });
+  }
+</script>

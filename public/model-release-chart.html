@@ -2768,7 +2768,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const savedCompanies=Array.isArray(stored?.selectedCompanies)?stored.selectedCompanies:Array.isArray(stored?.companies)?stored.companies:null;
     const storedSelection=savedCompanies?savedCompanies.filter(n=&gt;companyNames.includes(n)):stored?.titleRevision===1&amp;&amp;stored?.company&amp;&amp;stored.company!==&#x27;All&#x27;&amp;&amp;companyNames.includes(stored.company)?[stored.company]:companyNames;
     let selectedCompanies=storedSelection.length?companyNames.filter(n=&gt;storedSelection.includes(n)):[...companyNames];
-    let mode=(stored?.mode||stored?.view)===&#x27;all&#x27;?&#x27;all&#x27;:&#x27;frontier&#x27;, company=&#x27;All&#x27;, chartType=stored?.fitRevision===1&amp;&amp;stored?.chartType===&#x27;timeline&#x27;?&#x27;timeline&#x27;:&#x27;scatter&#x27;, selectedId=null, hoverId=null, rsiFit=null;
+    let mode=(stored?.mode||stored?.view)===&#x27;all&#x27;?&#x27;all&#x27;:&#x27;frontier&#x27;, company=&#x27;All&#x27;, chartType=stored?.chartDefaultRevision===2&amp;&amp;stored?.chartType===&#x27;scatter&#x27;?&#x27;scatter&#x27;:&#x27;timeline&#x27;, selectedId=null, hoverId=null, rsiFit=null;
     let zoomTransform=d3.zoomIdentity, width=0, height=0, left=84, right=0, rows=[], currentEvents=[], scatterVisible=[], scatterY=null, renderedChartType=null, projected=[];
     let horizon=Math.max(0,Math.min(24,Number(stored?.projectionMonths)||0));
     const heading=root.querySelector(&#x27;.heading h1&#x27;), daysNode=root.querySelector(&#x27;.headline-days&#x27;), companyNode=root.querySelector(&#x27;.company-control&#x27;), verbNode=root.querySelector(&#x27;.headline-verb&#x27;), scopeNode=root.querySelector(&#x27;.scope-toggle&#x27;);
@@ -2950,7 +2950,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       if(!currentEvents.some(e=&gt;e.id===selectedId))selectedId=null;
     }
     function save(){
-      window.openai?.setWidgetState?.({modelContent:{view:mode,companies:selectedCompanies,chartType,projectionMonths:horizon},privateContent:{mode,company,selectedCompanies,chartType,projectionMonths:horizon,titleRevision:1,fitRevision:1}})?.catch(()=&gt;{});
+      window.openai?.setWidgetState?.({modelContent:{view:mode,companies:selectedCompanies,chartType,projectionMonths:horizon},privateContent:{mode,company,selectedCompanies,chartType,projectionMonths:horizon,titleRevision:1,fitRevision:1,chartDefaultRevision:2}})?.catch(()=&gt;{});
     }
     function showTip(event,e,isInterval){
       if(!e)return;tip.replaceChildren();
@@ -3072,8 +3072,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
     function drawScatter(animate){
       viewScale=zoomTransform.rescaleX(baseScale);
-      const plotTop=svg.node().getBoundingClientRect().top-root.getBoundingClientRect().top;
-      height=Math.max(350,Math.floor(window.innerHeight-plotTop-100));
+      height=width&lt;500?350:440;
       const top=30,bottom=height-45;
       svg.attr(&#x27;width&#x27;,width).attr(&#x27;height&#x27;,height).attr(&#x27;viewBox&#x27;,`0 0 ${width} ${height}`);
       frame.attr(&#x27;x&#x27;,left).attr(&#x27;y&#x27;,top).attr(&#x27;width&#x27;,right-left).attr(&#x27;height&#x27;,bottom-top);
@@ -3165,8 +3164,9 @@ html&gt;body{padding:0}&lt;/style&gt;
     document.addEventListener(&#x27;pointerdown&#x27;,event=&gt;{if(!root.querySelector(&#x27;.company-control&#x27;).contains(event.target))setMenu(false);});
     const observer=new ResizeObserver(()=&gt;{const w=Math.floor(root.querySelector(&#x27;.plot&#x27;).getBoundingClientRect().width);if(w!==width)draw();});observer.observe(root.querySelector(&#x27;.plot&#x27;));
     window.addEventListener(&#x27;resize&#x27;,()=&gt;draw());
-    window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{const snapshot=e.detail?.globals?.widgetState;const state={...(snapshot?.modelContent||{}),...(snapshot?.privateContent||{})};const v=state.mode||state.view,c=state.company,t=state.chartType;let changed=false;if((v===&#x27;all&#x27;||v===&#x27;frontier&#x27;)&amp;&amp;v!==mode){mode=v;changed=true;}let list=Array.isArray(state.selectedCompanies)?state.selectedCompanies:Array.isArray(state.companies)?state.companies:null;let selection=list?companyNames.filter(n=&gt;list.includes(n)):state.titleRevision===1&amp;&amp;c===&#x27;All&#x27;?[...companyNames]:state.titleRevision===1&amp;&amp;companyNames.includes(c)?[c]:null;if(selection?.length&amp;&amp;selection.join(&#x27;|&#x27;)!==selectedCompanies.join(&#x27;|&#x27;)){selectedCompanies=selection;selectedId=null;changed=true;}if(state.fitRevision===1&amp;&amp;(t===&#x27;scatter&#x27;||t===&#x27;timeline&#x27;)&amp;&amp;t!==chartType){chartType=t;zoomTransform=d3.zoomIdentity;changed=true;}if(changed){compute();draw();}});
+    window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{const snapshot=e.detail?.globals?.widgetState;const state={...(snapshot?.modelContent||{}),...(snapshot?.privateContent||{})};const v=state.mode||state.view,c=state.company,t=state.chartType;let changed=false;if((v===&#x27;all&#x27;||v===&#x27;frontier&#x27;)&amp;&amp;v!==mode){mode=v;changed=true;}let list=Array.isArray(state.selectedCompanies)?state.selectedCompanies:Array.isArray(state.companies)?state.companies:null;let selection=list?companyNames.filter(n=&gt;list.includes(n)):state.titleRevision===1&amp;&amp;c===&#x27;All&#x27;?[...companyNames]:state.titleRevision===1&amp;&amp;companyNames.includes(c)?[c]:null;if(selection?.length&amp;&amp;selection.join(&#x27;|&#x27;)!==selectedCompanies.join(&#x27;|&#x27;)){selectedCompanies=selection;selectedId=null;changed=true;}if(state.chartDefaultRevision===2&amp;&amp;(t===&#x27;scatter&#x27;||t===&#x27;timeline&#x27;)&amp;&amp;t!==chartType){chartType=t;zoomTransform=d3.zoomIdentity;changed=true;}if(changed){compute();draw();}});
     compute();draw();document.fonts.ready.then(()=&gt;draw());
+    const sizeObserver=new ResizeObserver(()=&gt;window.parent.postMessage({type:&#x27;model-release-chart-height&#x27;,height:Math.ceil(root.getBoundingClientRect().height)+2},&#x27;*&#x27;));sizeObserver.observe(root);
     setInterval(()=&gt;{const d=today();if(d!==lastToday){lastToday=d;compute();draw();}},60000);
   })();
   &lt;/script&gt;
@@ -4038,6 +4038,15 @@ html&gt;body{padding:0}&lt;/style&gt;
   frame.srcdoc = frameHtml;
   delete frame.dataset.srcdoc;
 })();
+</script>
+<script>
+window.addEventListener('message', function(event) {
+  const frame = document.getElementById('codex-visualization');
+  const height = event.data?.height;
+  if (event.source !== frame?.contentWindow || event.data?.type !== 'model-release-chart-height' || !Number.isFinite(height) || height < 100 || height > 10000) return;
+  frame.style.height = height + 'px';
+  if (window.parent !== window) window.parent.postMessage({type: 'model-release-chart-height', height}, location.origin);
+});
 </script>
 </body>
 </html>

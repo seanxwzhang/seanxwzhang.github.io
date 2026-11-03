@@ -1,4 +1,16 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/when_is_next_model",
+      "destination": "/blog/when_is_next_model",
+      "permanent": true
+    },
+    {
+      "source": "/when_is_next_model.html",
+      "destination": "/blog/when_is_next_model",
+      "permanent": true
+    }
+  ]
 }
