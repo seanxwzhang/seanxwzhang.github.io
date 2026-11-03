@@ -1523,6 +1523,7 @@ svg.lucide {
 }
 
 html&gt;body{padding:0}&lt;/style&gt;
+&lt;style&gt;:root{color-scheme:dark!important;--background:oklch(.18 0 0)!important}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;script type=&quot;application/json&quot; id=&quot;codex-visualization-widget-state&quot;&gt;__CODEX_VISUALIZATION_WIDGET_STATE__&lt;/script&gt;
@@ -3071,7 +3072,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
     function drawScatter(animate){
       viewScale=zoomTransform.rescaleX(baseScale);
-      height=width&lt;500?350:440;
+      const plotTop=svg.node().getBoundingClientRect().top-root.getBoundingClientRect().top;
+      height=Math.max(350,Math.floor(window.innerHeight-plotTop-100));
       const top=30,bottom=height-45;
       svg.attr(&#x27;width&#x27;,width).attr(&#x27;height&#x27;,height).attr(&#x27;viewBox&#x27;,`0 0 ${width} ${height}`);
       frame.attr(&#x27;x&#x27;,left).attr(&#x27;y&#x27;,top).attr(&#x27;width&#x27;,right-left).attr(&#x27;height&#x27;,bottom-top);
@@ -3162,6 +3164,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     companyMenu.addEventListener(&#x27;click&#x27;,event=&gt;{const item=event.target.closest(&#x27;[data-company-choice]&#x27;);if(!item)return;const name=item.dataset.companyChoice;if(name===&#x27;All&#x27;)selectedCompanies=[...companyNames];else if(selectedCompanies.includes(name)){if(selectedCompanies.length===1)return;selectedCompanies=selectedCompanies.filter(n=&gt;n!==name);}else selectedCompanies=companyNames.filter(n=&gt;selectedCompanies.includes(n)||n===name);selectedId=null;hoverId=null;tip.hidden=true;compute();draw(true);save();item.focus();});
     document.addEventListener(&#x27;pointerdown&#x27;,event=&gt;{if(!root.querySelector(&#x27;.company-control&#x27;).contains(event.target))setMenu(false);});
     const observer=new ResizeObserver(()=&gt;{const w=Math.floor(root.querySelector(&#x27;.plot&#x27;).getBoundingClientRect().width);if(w!==width)draw();});observer.observe(root.querySelector(&#x27;.plot&#x27;));
+    window.addEventListener(&#x27;resize&#x27;,()=&gt;draw());
     window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{const snapshot=e.detail?.globals?.widgetState;const state={...(snapshot?.modelContent||{}),...(snapshot?.privateContent||{})};const v=state.mode||state.view,c=state.company,t=state.chartType;let changed=false;if((v===&#x27;all&#x27;||v===&#x27;frontier&#x27;)&amp;&amp;v!==mode){mode=v;changed=true;}let list=Array.isArray(state.selectedCompanies)?state.selectedCompanies:Array.isArray(state.companies)?state.companies:null;let selection=list?companyNames.filter(n=&gt;list.includes(n)):state.titleRevision===1&amp;&amp;c===&#x27;All&#x27;?[...companyNames]:state.titleRevision===1&amp;&amp;companyNames.includes(c)?[c]:null;if(selection?.length&amp;&amp;selection.join(&#x27;|&#x27;)!==selectedCompanies.join(&#x27;|&#x27;)){selectedCompanies=selection;selectedId=null;changed=true;}if(state.fitRevision===1&amp;&amp;(t===&#x27;scatter&#x27;||t===&#x27;timeline&#x27;)&amp;&amp;t!==chartType){chartType=t;zoomTransform=d3.zoomIdentity;changed=true;}if(changed){compute();draw();}});
     compute();draw();document.fonts.ready.then(()=&gt;draw());
     setInterval(()=&gt;{const d=today();if(d!==lastToday){lastToday=d;compute();draw();}},60000);
