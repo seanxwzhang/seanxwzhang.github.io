@@ -1815,7 +1815,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;div id=&quot;model-timeline&quot;&gt;
   &lt;style&gt;
     @import url(&#x27;https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;display=swap&#x27;);
-    #model-timeline{--background:oklch(.18 0 0);--foreground:oklch(.985 0 0);--muted-foreground:oklch(.708 0 0);--border:oklch(1 0 0 / 10%);--primary:oklch(.95 0 0);--primary-foreground:oklch(.18 0 0);--secondary:oklch(.269 0 0);--secondary-foreground:oklch(.985 0 0);--popover:oklch(.205 0 0);--popover-foreground:oklch(.985 0 0);--viz-series-1:hsl(218 78% 66%);--viz-series-2:hsl(160 48% 44%);--viz-series-3:hsl(31 88% 61%);--viz-series-4:hsl(0 60% 60%);--viz-series-5:hsl(191 75% 58%);background:var(--background);color:var(--foreground);font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;box-sizing:border-box;padding:calc(var(--font-size-base)*1.05);position:relative;width:100%}
+    #model-timeline{--background:oklch(.18 0 0);--foreground:oklch(.985 0 0);--muted-foreground:oklch(.708 0 0);--border:oklch(1 0 0 / 10%);--primary:oklch(.95 0 0);--primary-foreground:oklch(.18 0 0);--secondary:oklch(.269 0 0);--secondary-foreground:oklch(.985 0 0);--popover:oklch(.205 0 0);--popover-foreground:oklch(.985 0 0);--viz-series-1:hsl(218 78% 66%);--viz-series-2:hsl(160 48% 44%);--viz-series-3:hsl(31 88% 61%);--viz-series-4:hsl(0 60% 60%);--viz-series-5:hsl(191 75% 58%);background:var(--background);color:var(--foreground);font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;box-sizing:border-box;padding:calc(var(--font-size-base)*1.05);position:relative;width:min(100%, 1240px);margin:0 auto;padding-left:clamp(18px,4vw,48px);padding-right:clamp(18px,4vw,48px)}
     #model-timeline .heading{text-align:center}
     #model-timeline h1{font-weight:500}
     #model-timeline .forecast-wrap{text-align:center;margin:calc(var(--font-size-base)*.65) 0 calc(var(--font-size-base)*1.2)}
@@ -1854,6 +1854,20 @@ html&gt;body{padding:0}&lt;/style&gt;
     #model-timeline .rsi-fit{fill:none;stroke:var(--foreground);stroke-width:2;stroke-dasharray:5 4;opacity:.8;pointer-events:none}
     #model-timeline .scatter-label{paint-order:stroke;stroke:var(--background);stroke-width:4;stroke-linejoin:round}
     #model-timeline .gap-label{paint-order:stroke;stroke:var(--background);stroke-width:5;stroke-linejoin:round;font-variant-numeric:tabular-nums}
+    #model-timeline .projection-control{display:flex;align-items:center;gap:14px;margin:18px auto 0;max-width:620px;color:var(--muted-foreground);font-size:14px}
+    #model-timeline .projection-control label{white-space:nowrap}
+    #model-timeline .projection-control input{flex:1;min-width:60px;accent-color:var(--foreground);cursor:pointer}
+    #model-timeline .projection-control output{min-width:76px;text-align:right;color:var(--foreground);font-variant-numeric:tabular-nums}
+    #model-timeline .projection-results{max-width:900px;margin:14px auto 0;color:var(--muted-foreground);font-size:12px;line-height:1.6}
+    #model-timeline .projection-results[hidden]{display:none}
+    #model-timeline .projection-note{margin:0 0 8px}
+    #model-timeline .projection-list{display:flex;flex-wrap:wrap;gap:5px 18px;max-height:180px;overflow:auto}
+    #model-timeline .projection-item{white-space:nowrap}
+    #model-timeline .projection-item strong{color:var(--foreground);font-weight:500}
+    #model-timeline .projection-item::before{content:&#x27;◇&#x27;;color:var(--series);margin-right:5px}
+    #model-timeline .projection-line{fill:none;stroke-width:1.2;stroke-dasharray:4 4;opacity:.8}
+    #model-timeline .projection-point{fill:var(--background);stroke-width:1.5}
+    @media(max-width:520px){#model-timeline .projection-control{gap:8px}#model-timeline .projection-control label{white-space:normal}}
     #model-timeline .tooltip{position:absolute;pointer-events:none;z-index:5;max-width:min(360px,88%);padding:10px 12px;background:var(--popover);color:var(--popover-foreground);border:.5px solid var(--border);border-radius:8px;box-sizing:border-box}
     #model-timeline .tooltip[hidden]{display:none}
     #model-timeline .tip-sub{color:var(--muted-foreground);margin-top:5px}
@@ -1863,6 +1877,8 @@ html&gt;body{padding:0}&lt;/style&gt;
   &lt;div class=&quot;forecast-wrap&quot; aria-live=&quot;polite&quot; data-tooltip=&quot;Median under independent lognormal waiting times, conditioned on each company&#x27;s last known public frontier release. The fitted trend is held at today&#x27;s level. Data were last checked November 2, 2026; parameter uncertainty is not included.&quot;&gt;&lt;h1 class=&quot;forecast&quot;&gt;&lt;span class=&quot;forecast-lead&quot;&gt;Based on the RSI trend, next model release happens on&lt;/span&gt; &lt;span class=&quot;forecast-date tabular-nums&quot;&gt;—&lt;/span&gt;&lt;/h1&gt;&lt;/div&gt;
   &lt;div class=&quot;legend text-small&quot; aria-label=&quot;Companies&quot; hidden&gt;&lt;/div&gt;
   &lt;svg class=&quot;plot&quot; role=&quot;img&quot; aria-label=&quot;Model release timeline&quot;&gt;&lt;/svg&gt;
+  &lt;div class=&quot;projection-control&quot;&gt;&lt;label for=&quot;projection-range&quot;&gt;Extrapolate&lt;/label&gt;&lt;input id=&quot;projection-range&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;24&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;Extrapolation horizon in months&quot;&gt;&lt;output for=&quot;projection-range&quot; class=&quot;projection-horizon&quot;&gt;Off&lt;/output&gt;&lt;/div&gt;
+  &lt;div class=&quot;projection-results&quot; aria-live=&quot;polite&quot; hidden&gt;&lt;p class=&quot;projection-note&quot;&gt;Projected frontier releases by company; model names are illustrative.&lt;/p&gt;&lt;div class=&quot;projection-list&quot;&gt;&lt;/div&gt;&lt;/div&gt;
   &lt;div class=&quot;tooltip text-small&quot; role=&quot;tooltip&quot; hidden&gt;&lt;/div&gt;
   &lt;script id=&quot;model-timeline-data&quot; type=&quot;application/json&quot;&gt;{
   &quot;asOf&quot;: &quot;2026-11-02&quot;,
@@ -2745,14 +2761,15 @@ html&gt;body{padding:0}&lt;/style&gt;
     const series=raw.companies.map((s,ci)=&gt;({...s,ci,color:&#x27;var(--viz-series-&#x27;+(ci+1)+&#x27;)&#x27;,events:s.events.map(e=&gt;({...e,t:parse(e.date),id:s.name+&#x27;:&#x27;+e.date,ci,company:s.name}))}));
     const all=series.flatMap(s=&gt;s.events);
     const extent=d3.extent(all,d=&gt;d.t), span=extent[1]-extent[0];
-    const fullDomain=[new Date(+extent[0]-span*.022),new Date(Math.max(+parse(raw.asOf),+extent[1])+span*.022)];
+    let fullDomain=[new Date(+extent[0]-span*.022),new Date(Math.max(+parse(raw.asOf),+extent[1])+span*.022)];
     const stored={...(window.openai?.widgetState?.modelContent||{}),...(window.openai?.widgetState?.privateContent||{})};
     const companyNames=series.map(s=&gt;s.name);
     const savedCompanies=Array.isArray(stored?.selectedCompanies)?stored.selectedCompanies:Array.isArray(stored?.companies)?stored.companies:null;
     const storedSelection=savedCompanies?savedCompanies.filter(n=&gt;companyNames.includes(n)):stored?.titleRevision===1&amp;&amp;stored?.company&amp;&amp;stored.company!==&#x27;All&#x27;&amp;&amp;companyNames.includes(stored.company)?[stored.company]:companyNames;
     let selectedCompanies=storedSelection.length?companyNames.filter(n=&gt;storedSelection.includes(n)):[...companyNames];
     let mode=(stored?.mode||stored?.view)===&#x27;all&#x27;?&#x27;all&#x27;:&#x27;frontier&#x27;, company=&#x27;All&#x27;, chartType=stored?.fitRevision===1&amp;&amp;stored?.chartType===&#x27;timeline&#x27;?&#x27;timeline&#x27;:&#x27;scatter&#x27;, selectedId=null, hoverId=null, rsiFit=null;
-    let zoomTransform=d3.zoomIdentity, width=0, height=0, left=84, right=0, rows=[], currentEvents=[], scatterVisible=[], scatterY=null, renderedChartType=null;
+    let zoomTransform=d3.zoomIdentity, width=0, height=0, left=84, right=0, rows=[], currentEvents=[], scatterVisible=[], scatterY=null, renderedChartType=null, projected=[];
+    let horizon=Math.max(0,Math.min(24,Number(stored?.projectionMonths)||0));
     const heading=root.querySelector(&#x27;.heading h1&#x27;), daysNode=root.querySelector(&#x27;.headline-days&#x27;), companyNode=root.querySelector(&#x27;.company-control&#x27;), verbNode=root.querySelector(&#x27;.headline-verb&#x27;), scopeNode=root.querySelector(&#x27;.scope-toggle&#x27;);
     const svg=d3.select(root.querySelector(&#x27;.plot&#x27;));
     svg.append(&#x27;title&#x27;).text(&#x27;Model release timeline&#x27;);
@@ -2844,6 +2861,35 @@ html&gt;body{padding:0}&lt;/style&gt;
       const days=Math.ceil(waitDays),date=new Date(+asOf+days*day);
       return {date,days,waitDays};
     }
+    function illustrativeName(company,index){
+      if(company===&#x27;Anthropic&#x27;)return index%2===0?&#x27;Opus 5.&#x27;+(6+Math.floor(index/2)):&#x27;Fable 5.&#x27;+(2+Math.floor(index/2));
+      if(company===&#x27;OpenAI&#x27;)return &#x27;GPT 6.&#x27;+(index+1)+&#x27; Astra&#x27;;
+      if(company===&#x27;Google&#x27;)return &#x27;Gemini 4.&#x27;+(index+1);
+      if(company===&#x27;xAI&#x27;)return &#x27;Grok 4.&#x27;+(8+index);
+      return &#x27;Muse Wonder &#x27;+(index+2);
+    }
+    function buildProjections(fit,months){
+      if(!fit||!months||!Number.isFinite(fit.sigma)||fit.sigma&lt;=0)return [];
+      const asOf=parse(today()),until=d3.utcMonth.offset(asOf,months),year=365.2425*day,result=[];
+      for(const c of fit.coefficients){
+        if(!c.last||c.last.bound||c.last.t&gt;asOf)continue;
+        const s=series.find(x=&gt;x.name===c.name),age=(asOf-c.last.t)/day,mu=c.intercept+fit.slope*(+asOf-fit.origin)/year;
+        const base=normalLogSurvival(age&gt;0?(Math.log(age)-mu)/fit.sigma:-Infinity);
+        const logSurvival=wait=&gt;normalLogSurvival((Math.log(age+wait)-mu)/fit.sigma)-base;
+        let low=0,high=1;while(high&lt;36525&amp;&amp;logSurvival(high)&gt;-Math.log(2))high=Math.min(36525,high*2);
+        if(logSurvival(high)&gt;-Math.log(2))continue;
+        for(let j=0;j&lt;60;j++){const mid=(low+high)/2;if(logSurvival(mid)&gt;-Math.log(2))low=mid;else high=mid;}
+        let last=c.last, t=new Date(+asOf+Math.max(1,Math.ceil(high))*day);
+        for(let i=0;i&lt;120&amp;&amp;t&lt;=until;i++){
+          const label=illustrativeName(c.name,i),gap=Math.round((t-last.t)/day);
+          const e={id:c.name+&#x27;:projection:&#x27;+i,ci:s.ci,company:c.name,t,date:d3.utcFormat(&#x27;%Y-%m-%d&#x27;)(t),label,frontier:label,description:label,category:&#x27;frontier&#x27;,status:&#x27;projected&#x27;,previous:last,gap,gapPrefix:&#x27;&#x27;};
+          result.push(e);last=e;
+          const nextGap=Math.max(1,Math.round(Math.exp(Math.min(16,c.intercept+fit.slope*(+t-fit.origin)/year))));
+          t=new Date(+t+nextGap*day);
+        }
+      }
+      return result.sort((a,b)=&gt;a.t-b.t||a.ci-b.ci);
+    }
     function compute(){
       company=selectedCompanies.length===companyNames.length?&#x27;All&#x27;:selectedCompanies.length===1?selectedCompanies[0]:&#x27;Selected&#x27;;
       currentEvents=[];
@@ -2885,10 +2931,25 @@ html&gt;body{padding:0}&lt;/style&gt;
       if(chartType===&#x27;scatter&#x27;&amp;&amp;rsiFit){const item=document.createElement(&#x27;span&#x27;);item.className=&#x27;legend-item&#x27;;item.setAttribute(&#x27;data-tooltip&#x27;,&#x27;Exponential fit of frontier release gaps, adjusted for company. A descriptive trend, not evidence of recursive self-improvement.&#x27;);const line=document.createElement(&#x27;span&#x27;);line.className=&#x27;legend-fit&#x27;;const text=document.createElement(&#x27;span&#x27;);const change=100*Math.expm1(rsiFit.slope);text.textContent=&#x27;RSI fit &#x27;+(change&gt;=0?&#x27;+&#x27;:&#x27;−&#x27;)+Math.abs(change).toFixed(1)+&#x27;% / yr&#x27;;item.append(line,text);legend.append(item);}
       const chartButton=root.querySelector(&#x27;.view-toggle&#x27;);chartButton.replaceChildren();const icon=document.createElement(&#x27;i&#x27;);icon.setAttribute(&#x27;data-lucide&#x27;,chartType===&#x27;timeline&#x27;?&#x27;chart-scatter&#x27;:&#x27;chart-no-axes-gantt&#x27;);icon.setAttribute(&#x27;aria-hidden&#x27;,&#x27;true&#x27;);chartButton.append(icon);chartButton.setAttribute(&#x27;aria-label&#x27;,chartType===&#x27;timeline&#x27;?&#x27;Switch to scatter chart&#x27;:&#x27;Switch to timeline&#x27;);chartButton.setAttribute(&#x27;data-tooltip&#x27;,chartType===&#x27;timeline&#x27;?&#x27;Scatter chart&#x27;:&#x27;Timeline&#x27;);
       if(window.lucide)window.lucide.createIcons({attrs:{width:16,height:16}});
+      projected=buildProjections(rsiFit,horizon);
+      const range=root.querySelector(&#x27;#projection-range&#x27;),output=root.querySelector(&#x27;.projection-horizon&#x27;),results=root.querySelector(&#x27;.projection-results&#x27;),list=root.querySelector(&#x27;.projection-list&#x27;);
+      range.value=String(horizon);range.disabled=!rsiFit||!Number.isFinite(rsiFit.sigma)||rsiFit.sigma&lt;=0;
+      output.textContent=horizon?(&#x27;+&#x27;+horizon+&#x27; &#x27;+(horizon===1?&#x27;month&#x27;:&#x27;months&#x27;)):&#x27;Off&#x27;;
+      range.setAttribute(&#x27;aria-valuetext&#x27;,output.textContent);
+      results.hidden=!horizon;list.replaceChildren();
+      if(horizon){
+        for(const e of projected){const item=document.createElement(&#x27;span&#x27;);item.className=&#x27;projection-item&#x27;;item.style.setProperty(&#x27;--series&#x27;,series[e.ci].color);const name=document.createElement(&#x27;strong&#x27;);name.textContent=e.company+&#x27; &#x27;+e.label;item.append(name,document.createTextNode(&#x27;  &#x27;+d3.utcFormat(&#x27;%b %-d, %Y&#x27;)(e.t)));list.append(item);}
+        if(!projected.length)list.textContent=range.disabled?&#x27;Select companies with sufficient release history for a projection.&#x27;:&#x27;No projected releases in this range.&#x27;;
+      }
+      for(const s of series){const more=projected.filter(e=&gt;e.company===s.name);const stream=s.streams.find(v=&gt;v.category===&#x27;frontier&#x27;);if(stream&amp;&amp;more.length)stream.values=[...stream.values,...more];}
+      currentEvents.push(...projected);
+      const end=horizon?d3.utcMonth.offset(parse(today()),horizon):new Date(Math.max(+parse(raw.asOf),+extent[1]));
+      fullDomain=[new Date(+extent[0]-span*.022),new Date(Math.max(+end,+extent[1])+span*.022)];
+      baseScale.domain(fullDomain);
       if(!currentEvents.some(e=&gt;e.id===selectedId))selectedId=null;
     }
     function save(){
-      window.openai?.setWidgetState?.({modelContent:{view:mode,companies:selectedCompanies,chartType},privateContent:{mode,company,selectedCompanies,chartType,titleRevision:1,fitRevision:1}})?.catch(()=&gt;{});
+      window.openai?.setWidgetState?.({modelContent:{view:mode,companies:selectedCompanies,chartType,projectionMonths:horizon},privateContent:{mode,company,selectedCompanies,chartType,projectionMonths:horizon,titleRevision:1,fitRevision:1}})?.catch(()=&gt;{});
     }
     function showTip(event,e,isInterval){
       if(!e)return;tip.replaceChildren();
@@ -2896,6 +2957,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       const b=document.createElement(&#x27;div&#x27;);b.className=&#x27;tip-sub tabular-nums&#x27;;b.textContent=textDate(e);tip.append(b);
       if(e.previous){const c=document.createElement(&#x27;div&#x27;);c.className=&#x27;tip-sub&#x27;;c.textContent=e.gapPrefix+e.gap+&#x27; days since &#x27;+(mode===&#x27;frontier&#x27;?e.previous.frontier:e.previous.label);tip.append(c);}
       if(mode===&#x27;all&#x27;){const c=document.createElement(&#x27;div&#x27;);c.className=&#x27;tip-sub&#x27;;c.textContent=e.description;tip.append(c);}
+      if(e.status===&#x27;projected&#x27;){const c=document.createElement(&#x27;div&#x27;);c.className=&#x27;tip-sub&#x27;;c.textContent=&#x27;Projected date; illustrative model name&#x27;;tip.append(c);}
       if(e.status===&#x27;announced&#x27;){const c=document.createElement(&#x27;div&#x27;);c.className=&#x27;tip-sub&#x27;;c.textContent=&#x27;Announced, limited rollout planned; excluded from fit&#x27;;tip.append(c);}
       else if(e.gapPrefix){const c=document.createElement(&#x27;div&#x27;);c.className=&#x27;tip-sub&#x27;;c.textContent=&#x27;Date uncertain; excluded from fit&#x27;;tip.append(c);}
       tip.hidden=false;
@@ -2969,13 +3031,13 @@ html&gt;body{padding:0}&lt;/style&gt;
       groups.each(function(row){
         const g=d3.select(this),s=row.s;
         g.selectAll(&#x27;line.lane&#x27;).data([row]).join(&#x27;line&#x27;).attr(&#x27;class&#x27;,&#x27;lane grid&#x27;).attr(&#x27;x1&#x27;,left).attr(&#x27;x2&#x27;,right).attr(&#x27;y1&#x27;,row.baseline).attr(&#x27;y2&#x27;,row.baseline);
-        const paths=g.selectAll(&#x27;path.link-line&#x27;).data(row.intervals,e=&gt;e.id).join(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;link-line&#x27;).attr(&#x27;stroke&#x27;,s.color).attr(&#x27;stroke-dasharray&#x27;,row.category===&#x27;other&#x27;?&#x27;3 3&#x27;:null).attr(&#x27;data-class&#x27;,row.category).attr(&#x27;data-gap&#x27;,e=&gt;e.gap).attr(&#x27;data-gap-prefix&#x27;,e=&gt;e.gapPrefix).attr(&#x27;data-interval-id&#x27;,e=&gt;e.id);
+        const paths=g.selectAll(&#x27;path.link-line&#x27;).data(row.intervals,e=&gt;e.id).join(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;link-line&#x27;).attr(&#x27;stroke&#x27;,s.color).attr(&#x27;stroke-dasharray&#x27;,e=&gt;e.status===&#x27;projected&#x27;||row.category===&#x27;other&#x27;?&#x27;3 3&#x27;:null).attr(&#x27;data-class&#x27;,row.category).attr(&#x27;data-gap&#x27;,e=&gt;e.gap).attr(&#x27;data-gap-prefix&#x27;,e=&gt;e.gapPrefix).attr(&#x27;data-interval-id&#x27;,e=&gt;e.id);
         const path=e=&gt;`M${e.x1},${row.baseline+7}V${e.yy}H${e.x2}V${row.baseline+7}`;
         if(duration)paths.transition().duration(duration).attr(&#x27;d&#x27;,path);else paths.interrupt().attr(&#x27;d&#x27;,path);
         g.selectAll(&#x27;text.gap-label&#x27;).data(row.intervals,e=&gt;e.id).join(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;gap-label&#x27;).attr(&#x27;x&#x27;,e=&gt;e.cx).attr(&#x27;y&#x27;,e=&gt;e.yy+4).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(e=&gt;e.value);
         const points=g.selectAll(&#x27;path.point&#x27;).data(row.shown,e=&gt;e.id).join(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;point&#x27;).attr(&#x27;data-event-id&#x27;,e=&gt;e.id).attr(&#x27;data-release-date&#x27;,e=&gt;e.date).attr(&#x27;data-class&#x27;,e=&gt;e.frontier?&#x27;frontier&#x27;:&#x27;other&#x27;)
-          .attr(&#x27;d&#x27;,e=&gt;d3.symbol().type(mode===&#x27;all&#x27;&amp;&amp;!e.frontier?d3.symbolSquare:d3.symbolCircle).size(64)())
-          .attr(&#x27;fill&#x27;,e=&gt;e.bound||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?&#x27;var(--background)&#x27;:s.color).attr(&#x27;stroke&#x27;,e=&gt;e.bound||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?s.color:&#x27;var(--background)&#x27;).attr(&#x27;stroke-width&#x27;,e=&gt;e.bound||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?1.5:1.1);
+          .attr(&#x27;d&#x27;,e=&gt;d3.symbol().type(e.status===&#x27;projected&#x27;?d3.symbolDiamond:mode===&#x27;all&#x27;&amp;&amp;!e.frontier?d3.symbolSquare:d3.symbolCircle).size(64)())
+          .attr(&#x27;fill&#x27;,e=&gt;e.status===&#x27;projected&#x27;||e.bound||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?&#x27;var(--background)&#x27;:s.color).attr(&#x27;stroke&#x27;,e=&gt;e.status===&#x27;projected&#x27;||e.bound||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?s.color:&#x27;var(--background)&#x27;).attr(&#x27;stroke-width&#x27;,e=&gt;e.status===&#x27;projected&#x27;||e.bound||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?1.5:1.1);
         if(duration)points.transition().duration(duration).attr(&#x27;transform&#x27;,e=&gt;`translate(${viewScale(e.t)},${row.baseline})`);else points.interrupt().attr(&#x27;transform&#x27;,e=&gt;`translate(${viewScale(e.t)},${row.baseline})`);
         g.selectAll(&#x27;path.model-leader&#x27;).data(row.labels,e=&gt;e.id).join(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;model-leader&#x27;).attr(&#x27;d&#x27;,e=&gt;{const y=row.baseline-23-e.level*32;return `M${viewScale(e.t)},${row.baseline-7}L${viewScale(e.t)},${row.baseline-13}L${e.cx},${y+4}`;});
         const labels=g.selectAll(&#x27;text.model-name&#x27;).data(row.labels,e=&gt;e.id).join(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;model-name&#x27;).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).attr(&#x27;x&#x27;,e=&gt;e.cx).attr(&#x27;y&#x27;,e=&gt;row.baseline-23-e.level*32-(e.lines.length-1)*14);
@@ -3033,20 +3095,20 @@ html&gt;body{padding:0}&lt;/style&gt;
       axis.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;secondary axis-title&#x27;).attr(&#x27;data-axis&#x27;,&#x27;x&#x27;).attr(&#x27;x&#x27;,(left+right)/2).attr(&#x27;y&#x27;,height-4).attr(&#x27;text-anchor&#x27;,&#x27;middle&#x27;).text(&#x27;Date&#x27;);
       axis.append(&#x27;text&#x27;).attr(&#x27;class&#x27;,&#x27;secondary chart-credit&#x27;).attr(&#x27;x&#x27;,right).attr(&#x27;y&#x27;,height-4).attr(&#x27;text-anchor&#x27;,&#x27;end&#x27;).text(&#x27;@_seanzhang_&#x27;);
       const connectors=[];
-      for(const s of series){if(!selectedCompanies.includes(s.name))continue;for(const stream of s.streams){const values=stream.values.filter(e=&gt;e.gap!==null);for(let i=1;i&lt;values.length;i++){const a=values[i-1],b=values[i];if(b.t&lt;lo||a.t&gt;hi)continue;connectors.push({id:b.id,a,b,color:s.color,category:stream.category});}}}
+      for(const s of series){if(!selectedCompanies.includes(s.name))continue;for(const stream of s.streams){const values=stream.values.filter(e=&gt;e.gap!==null);for(let i=1;i&lt;values.length;i++){const b=values[i],a=b.status===&#x27;projected&#x27;?b.previous:values[i-1];if(b.t&lt;lo||a.t&gt;hi)continue;connectors.push({id:b.id,a,b,color:s.color,category:stream.category});}}}
       tracks.selectAll(&#x27;path.scatter-connector&#x27;).data(connectors,e=&gt;e.id).join(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;scatter-connector&#x27;).attr(&#x27;data-company&#x27;,e=&gt;e.b.company).attr(&#x27;stroke&#x27;,e=&gt;e.color)
         .attr(&#x27;data-class&#x27;,e=&gt;e.category).attr(&#x27;data-from-id&#x27;,e=&gt;e.a.id).attr(&#x27;data-to-id&#x27;,e=&gt;e.b.id)
-        .attr(&#x27;stroke-dasharray&#x27;,e=&gt;e.category===&#x27;other&#x27;||e.a.gapPrefix||e.b.gapPrefix?&#x27;3 3&#x27;:null)
+        .attr(&#x27;stroke-dasharray&#x27;,e=&gt;e.b.status===&#x27;projected&#x27;||e.category===&#x27;other&#x27;||e.a.gapPrefix||e.b.gapPrefix?&#x27;3 3&#x27;:null)
         .attr(&#x27;d&#x27;,e=&gt;`M${viewScale(e.a.t)},${scatterY(e.a.gap)}L${viewScale(e.b.t)},${scatterY(e.b.gap)}`);
       tracks.selectAll(&#x27;path.scatter-connector&#x27;).lower();
       const fitPath=tracks.selectAll(&#x27;path.rsi-fit&#x27;).data(rsiFit?[rsiFit]:[]).join(&#x27;path&#x27;).attr(&#x27;class&#x27;,&#x27;rsi-fit&#x27;).attr(&#x27;data-rsi-slope&#x27;,d=&gt;d.slope).attr(&#x27;data-rsi-sample-size&#x27;,d=&gt;d.n)
-        .attr(&#x27;d&#x27;,d=&gt;d3.line().x(p=&gt;viewScale(p.t)).y(p=&gt;scatterY(p.gap))(d.points));
+        .attr(&#x27;d&#x27;,d=&gt;{const points=[...d.points];if(horizon){const t=+d3.utcMonth.offset(parse(today()),horizon);points.push({t:new Date(t),gap:Math.exp(d3.mean(d.coefficients,c=&gt;c.intercept)+d.slope*(t-d.origin)/(365.2425*day))});}return d3.line().x(p=&gt;viewScale(p.t)).y(p=&gt;scatterY(p.gap))(points);});
       fitPath.raise();
       const points=tracks.selectAll(&#x27;path.scatter-point&#x27;).data(scatterVisible,e=&gt;e.id).join(&#x27;path&#x27;)
         .attr(&#x27;class&#x27;,&#x27;scatter-point&#x27;).attr(&#x27;data-event-id&#x27;,e=&gt;e.id).attr(&#x27;data-release-date&#x27;,e=&gt;e.date).attr(&#x27;data-gap&#x27;,e=&gt;e.gap).attr(&#x27;data-gap-prefix&#x27;,e=&gt;e.gapPrefix).attr(&#x27;data-class&#x27;,e=&gt;e.frontier?&#x27;frontier&#x27;:&#x27;other&#x27;)
-        .attr(&#x27;d&#x27;,e=&gt;d3.symbol().type(mode===&#x27;all&#x27;&amp;&amp;!e.frontier?d3.symbolSquare:d3.symbolCircle).size(70)())
-        .attr(&#x27;data-fit-included&#x27;,e=&gt;String(e.category===&#x27;frontier&#x27;&amp;&amp;!e.gapPrefix&amp;&amp;e.status!==&#x27;announced&#x27;&amp;&amp;e.previous?.status!==&#x27;announced&#x27;))
-        .attr(&#x27;fill&#x27;,e=&gt;e.gapPrefix||e.status===&#x27;announced&#x27;||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?&#x27;var(--background)&#x27;:series[e.ci].color).attr(&#x27;stroke&#x27;,e=&gt;e.gapPrefix||e.status===&#x27;announced&#x27;||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?series[e.ci].color:&#x27;var(--background)&#x27;).attr(&#x27;stroke-width&#x27;,e=&gt;e.gapPrefix||e.status===&#x27;announced&#x27;||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?1.5:1);
+        .attr(&#x27;d&#x27;,e=&gt;d3.symbol().type(e.status===&#x27;projected&#x27;?d3.symbolDiamond:mode===&#x27;all&#x27;&amp;&amp;!e.frontier?d3.symbolSquare:d3.symbolCircle).size(70)())
+        .attr(&#x27;data-fit-included&#x27;,e=&gt;String(e.category===&#x27;frontier&#x27;&amp;&amp;!e.gapPrefix&amp;&amp;e.status!==&#x27;projected&#x27;&amp;&amp;e.status!==&#x27;announced&#x27;&amp;&amp;e.previous?.status!==&#x27;announced&#x27;))
+        .attr(&#x27;fill&#x27;,e=&gt;e.status===&#x27;projected&#x27;||e.gapPrefix||e.status===&#x27;announced&#x27;||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?&#x27;var(--background)&#x27;:series[e.ci].color).attr(&#x27;stroke&#x27;,e=&gt;e.status===&#x27;projected&#x27;||e.gapPrefix||e.status===&#x27;announced&#x27;||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?series[e.ci].color:&#x27;var(--background)&#x27;).attr(&#x27;stroke-width&#x27;,e=&gt;e.status===&#x27;projected&#x27;||e.gapPrefix||e.status===&#x27;announced&#x27;||(mode===&#x27;all&#x27;&amp;&amp;!e.frontier)?1.5:1);
       points.raise();
       if(animate&amp;&amp;!window.matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches)points.transition().duration(220).attr(&#x27;transform&#x27;,e=&gt;`translate(${viewScale(e.t)},${scatterY(e.gap)})`);
       else points.interrupt().attr(&#x27;transform&#x27;,e=&gt;`translate(${viewScale(e.t)},${scatterY(e.gap)})`);
@@ -3085,6 +3147,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     svg.attr(&#x27;data-chart-hit&#x27;,&#x27;nearest-point&#x27;).on(&#x27;pointermove&#x27;,event=&gt;{if(event.buttons)return;const item=locate(event);if(!item){tip.hidden=true;hoverId=null;drawFocus();return;}hoverId=item.e.id;showTip(event,item.e,item.interval);drawFocus();})
       .on(&#x27;pointerleave&#x27;,()=&gt;{tip.hidden=true;hoverId=null;drawFocus();})
       .on(&#x27;click&#x27;,event=&gt;{if(event.defaultPrevented)return;const item=locate(event);if(item){selectedId=item.e.id;showTip(event,item.e,item.interval);drawFocus();}});
+    root.querySelector(&#x27;#projection-range&#x27;).addEventListener(&#x27;input&#x27;,event=&gt;{horizon=Number(event.target.value);selectedId=null;hoverId=null;tip.hidden=true;compute();svg.call(zoom.transform,d3.zoomIdentity);save();});
     root.querySelector(&#x27;.scope-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{mode=mode===&#x27;frontier&#x27;?&#x27;all&#x27;:&#x27;frontier&#x27;;hoverId=null;tip.hidden=true;compute();draw(true);save();});
     root.querySelector(&#x27;.view-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{chartType=chartType===&#x27;timeline&#x27;?&#x27;scatter&#x27;:&#x27;timeline&#x27;;selectedId=null;hoverId=null;tip.hidden=true;compute();svg.call(zoom.transform,d3.zoomIdentity);save();});
     const companyTrigger=root.querySelector(&#x27;.company-trigger&#x27;),companyMenu=root.querySelector(&#x27;.company-menu&#x27;);
